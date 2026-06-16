@@ -2,11 +2,10 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Assume db.php is needed, keeping require_once as per original
-// require_once 'db.php'; // Uncomment if db.php is present in the directory
+require_once 'db.php'; 
 ?>
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,263 +13,299 @@ if (session_status() === PHP_SESSION_NONE) {
     
     <link rel="manifest" href="manifest.json">
     
-    <!-- Fonts -->
+    <script>(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('harvestiq-theme')||'light');}catch(e){}})();</script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Dependencies (Ensure you have these in your assets folder) -->
     <link rel="stylesheet" href="assets/css/all.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    
-    <!-- New Dark Emerald Glassmorphism Theme -->
-    <link rel="stylesheet" href="style.css?v=5.0">
+    <link rel="stylesheet" href="style.css?v=3.0">
     <script src="assets/js/theme.js" defer></script>
-</head>
-<body class="bg-slate-900 text-slate-100 font-inter antialiased">
 
-    <!-- Progress Bar -->
+    <style>
+        /* ==========================================
+           HOW IT WORKS SECTION CSS 
+        =========================================== */
+        .hiw-section { padding: 100px 20px; position: relative; z-index: 1; overflow: hidden; }
+        .hiw-header { text-align: center; margin-bottom: 70px; position: relative; z-index: 2; }
+        .hiw-tag { display: inline-block; padding: 6px 16px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: #10b981; border-radius: 50px; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 15px; }
+        .hiw-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 15px; letter-spacing: -1px; }
+        .hiw-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .hiw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; position: relative; }
+
+        @media(min-width: 992px) {
+            .hiw-grid::before {
+                content: ''; position: absolute; top: 45px; left: 15%; right: 15%; height: 2px;
+                background: linear-gradient(90deg, rgba(16,185,129,0) 0%, rgba(16,185,129,0.5) 50%, rgba(16,185,129,0) 100%);
+                z-index: -1; border-bottom: 2px dashed #10b981; opacity: 0.5; animation: dashFlow 20s linear infinite;
+            }
+        }
+        @keyframes dashFlow { to { background-position: 1000px 0; } }
+
+        .hiw-card {
+            background: var(--glass-bg, rgba(15, 23, 42, 0.6));
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.05));
+            border-radius: 24px; padding: 40px 30px; text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; z-index: 2;
+        }
+        .hiw-card:hover { transform: translateY(-15px); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(16, 185, 129, 0.05); }
+
+        .hiw-step-node {
+            width: 70px; height: 70px; background: var(--bg-main, #0f172a); border: 2px solid #10b981;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800;
+            color: #10b981; margin: -75px auto 25px auto;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), inset 0 0 10px rgba(16, 185, 129, 0.2); transition: 0.3s;
+        }
+        .hiw-card:hover .hiw-step-node { background: #10b981; color: #fff; box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); transform: scale(1.1); }
+
+        .hiw-icon {
+            width: 80px; height: 80px; background: rgba(128, 128, 128, 0.05); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
+            color: var(--text-muted); margin: 0 auto 25px; transition: 0.3s; border: 1px solid rgba(128, 128, 128, 0.1);
+        }
+        .hiw-card:hover .hiw-icon { color: #10b981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+        .hiw-card h3 { color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; }
+        .hiw-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+        .hiw-card::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 50%; height: 2px; background: #10b981; box-shadow: 0 -5px 20px rgba(16,185,129,0.5); opacity: 0; transition: 0.4s; }
+        .hiw-card:hover::after { opacity: 1; width: 80%; }
+
+        /* ==========================================
+           TRUST BADGE SECTION (NEW) 
+        =========================================== */
+        .trust-section { padding: 40px 20px; background: rgba(16, 185, 129, 0.05); border-top: 1px solid rgba(16, 185, 129, 0.1); border-bottom: 1px solid rgba(16, 185, 129, 0.1); text-align: center; }
+        .trust-content { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 30px; max-width: 900px; margin: 0 auto; }
+        .trust-item { display: flex; align-items: center; gap: 15px; }
+        .trust-avatars { display: flex; }
+        .trust-avatars img { width: 45px; height: 45px; border-radius: 50%; border: 3px solid var(--bg-main, #0f172a); margin-left: -15px; background: #fff;}
+        .trust-avatars img:first-child { margin-left: 0; }
+        .trust-text { text-align: left; }
+        .trust-text h4 { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--text-main); }
+        .trust-text p { margin: 0; font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+        .trust-stars { color: #f59e0b; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
     <div id="progressBar" class="progress-bar"></div>
 
-    <!-- Navigation Placeholder -->
-    <?php // include 'nav.php'; ?>
-    <nav class="glass-panel" style="position: fixed; top: 15px; left: 5%; right: 5%; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-radius: 100px;">
-        <div class="font-jakarta fs-4 fw-bold text-white"><i class="fa-solid fa-leaf text-emerald-400"></i> HarvestIQ</div>
-        <div class="d-none d-md-flex gap-4 fw-semibold">
-            <a href="#features" class="text-white text-decoration-none">Features</a>
-            <a href="#journey" class="text-white text-decoration-none">How it Works</a>
-            <a href="#impact" class="text-white text-decoration-none">Our Impact</a>
-        </div>
-        <div>
-            <?php if(!isset($_SESSION['user_id'])): ?>
-                <button class="btn-neon" style="padding: 10px 24px; font-size: 0.95rem;">Login / Sign Up</button>
-            <?php else: ?>
-                <button class="btn-neon" style="padding: 10px 24px; font-size: 0.95rem;">Dashboard</button>
-            <?php endif; ?>
-        </div>
-    </nav>
+    <?php include 'nav.php'; ?>
 
-    <!-- THE "WOW" HERO SECTION -->
-    <section class="hero-wrapper">
-        <div class="hero-bg-glow"></div>
-        
-        <!-- Floating UI Elements / Badges -->
-        <div class="floating-badge badge-1">
-            <i class="fa-solid fa-cloud-sun text-emerald-400"></i> <span>32°C Live Radar</span>
-        </div>
-        <div class="floating-badge badge-2">
-            <i class="fa-solid fa-arrow-trend-up text-emerald-400"></i> <span>Wheat +4.2%</span>
-        </div>
-        <div class="floating-badge badge-3">
-            <i class="fa-solid fa-robot text-emerald-400"></i> <span>AI Soil Analysis Ready</span>
+    <section class="hero" id="home">
+        <div class="hero-bg-orbs">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+            <div class="hero-grid-lines"></div>
         </div>
 
-        <div class="container hero-content reveal">
-            <!-- Sleek Badge -->
-            <div class="d-inline-flex align-items-center gap-2 px-4 py-2 rounded-pill mb-4" style="background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); color: var(--emerald-400); font-weight: 700; font-size: 0.9rem;">
-                <i class="fa-solid fa-microchip"></i> AI-Powered Agriculture v2.0
-            </div>
+        <div class="hero-float-cards">
+            <div class="float-card float-card-1"><i class="fa-solid fa-cloud-sun-rain"></i> Live Weather</div>
+            <div class="float-card float-card-2"><i class="fa-solid fa-chart-line"></i>Market Rates</div>
+            <div class="float-card float-card-3"><i class="fa-solid fa-seedling"></i> Crop AI</div>
+        </div>
+
+        <div class="container hero-content reveal visible">
+            <div class="hero-badge"><i class="fa-solid fa-microchip"></i> AI-Powered Agriculture</div>
+            <h1>Grow More. Guess Less.<br><span class="gradient-text">Cultivate Smarter.</span></h1>
+            <p>Empowering rural farmers with real-time weather intelligence, live market insights, and AI-driven crop recommendations to maximize yield and profit.</p>
             
-            <h1 class="hero-title font-jakarta text-white">
-                Grow More. Guess Less.<br>
-                <span class="text-gradient">Cultivate Smarter.</span>
-            </h1>
-            <p class="hero-subtitle">
-                The ultimate AI-powered agricultural advisory platform. We equip rural farmers with real-time weather intelligence, live market insights, and predictive crop recommendations to maximize yield and eliminate middleman exploitation.
-            </p>
-            
-            <div class="d-flex justify-content-center gap-3 flex-wrap mt-5">
+            <div class="hero-buttons">
                 <?php if(!isset($_SESSION['user_id'])): ?>
-                    <button onclick="openAuthModal('signupModal')" class="btn-neon">
-                        Get Started Free <i class="fa-solid fa-arrow-right"></i>
+                    <button onclick="openAuthModal('signupModal')" class="btn-premium btn-primary-glow">
+                        Join HarvestIQ Free <i class="fa-solid fa-arrow-right"></i>
                     </button>
-                    <a href="#features" class="btn-glass">
-                        <i class="fa-solid fa-play"></i> Watch Demo
-                    </a>
+                    <a href="#features" class="btn-premium btn-outline-glow">Explore Features</a>
                 <?php else: ?>
-                    <a href="dashboard.php" class="btn-neon">
-                        Enter Workspace <i class="fa-solid fa-table-columns"></i>
+                    <a href="dashboard.php" class="btn-premium btn-primary-glow">
+                        Enter Dashboard <i class="fa-solid fa-table-columns"></i>
                     </a>
-                    <a href="market_prices.php" class="btn-glass">
-                        Live Market Rates
-                    </a>
+                    <a href="market_prices.php" class="btn-premium btn-outline-glow">Live Market</a>
                 <?php endif; ?>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <h3>24/7</h3>
+                    <span>Live Weather Alerts</span>
+                </div>
+                <div class="stat-box">
+                    <h3>100%</h3>
+                    <span>Data Transparency</span>
+                </div>
+                <div class="stat-box">
+                    <h3>Multi</h3>
+                    <span>Language Support</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- THE "HACKATHON FLEX" TRUST BAR -->
-    <div class="trust-bar reveal">
+    <!-- NEW TRUST BADGE SECTION -->
+    <div class="trust-section reveal">
         <div class="trust-content">
-            <div class="trust-item"><i class="fa-solid fa-bolt"></i> ⚡ AI-Powered Advisory</div>
-            <div class="trust-item"><i class="fa-solid fa-wifi"></i> 📶 100% Offline Capable (PWA)</div>
-            <div class="trust-item"><i class="fa-solid fa-language"></i> 🌍 Multi-lingual Native</div>
-            <div class="trust-item"><i class="fa-solid fa-shield-check"></i> 🔒 Verified Mandi Data</div>
+            <div class="trust-item">
+                <div class="trust-avatars">
+                    <img src="https://i.pravatar.cc/100?img=11" alt="Farmer 1">
+                    <img src="https://i.pravatar.cc/100?img=33" alt="Farmer 2">
+                    <img src="https://i.pravatar.cc/100?img=68" alt="Farmer 3">
+                </div>
+                <div class="trust-text">
+                    <div class="trust-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p>Trusted by <strong>1,200+</strong> local farmers</p>
+                </div>
+            </div>
+            <div style="width: 1px; height: 40px; background: rgba(128,128,128,0.2);" class="d-none d-md-block"></div>
+            <div class="trust-item">
+                <div class="trust-text" style="text-align: center;">
+                    <h4><i class="fa-solid fa-shield-halved text-success me-2"></i> Verified Market Data</h4>
+                    <p>Prices synced directly from wholesale Mandis</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- MODERN BENTO-BOX FEATURE GRID -->
-    <section id="features" class="bento-section">
-        <div class="section-header reveal">
-            <h2 class="section-title font-jakarta text-gradient">Intelligence at Scale</h2>
-            <p class="text-secondary-light fs-5">Powerful tools engineered to revolutionize your farm's productivity.</p>
+    <div class="market-ticker" id="market">
+        <div class="ticker-content">
+            <div class="ticker-item"><span class="t-crop">Wheat (Delhi):</span> <span class="t-price">₹2,250</span> <i class="fa-solid fa-caret-up t-up"></i></div>
+            <div class="ticker-item"><span class="t-crop">Rice (Kolkata):</span> <span class="t-price">₹3,100</span> <i class="fa-solid fa-caret-down t-down"></i></div>
+            <div class="ticker-item"><span class="t-crop">Potato (UP):</span> <span class="t-price">₹1,800</span> <i class="fa-solid fa-caret-up t-up"></i></div>
+            <div class="ticker-item"><span class="t-crop">Mustard (Punjab):</span> <span class="t-price">₹5,400</span> <i class="fa-solid fa-caret-up t-up"></i></div>
+            <div class="ticker-item"><span class="t-crop">Maize (Bihar):</span> <span class="t-price">₹2,100</span> <i class="fa-solid fa-caret-down t-down"></i></div>
+            <div class="ticker-item"><span class="t-crop">Wheat (Delhi):</span> <span class="t-price">₹2,250</span> <i class="fa-solid fa-caret-up t-up"></i></div>
+            <div class="ticker-item"><span class="t-crop">Rice (Kolkata):</span> <span class="t-price">₹3,100</span> <i class="fa-solid fa-caret-down t-down"></i></div>
+            <div class="ticker-item"><span class="t-crop">Potato (UP):</span> <span class="t-price">₹1,800</span> <i class="fa-solid fa-caret-up t-up"></i></div>
+            <div class="ticker-item"><span class="t-crop">Mustard (Punjab):</span> <span class="t-price">₹5,400</span> <i class="fa-solid fa-caret-up t-up"></i></div>
+            <div class="ticker-item"><span class="t-crop">Maize (Bihar):</span> <span class="t-price">₹2,100</span> <i class="fa-solid fa-caret-down t-down"></i></div>
         </div>
+    </div>
 
-        <div class="bento-grid">
-            <!-- Large Card: Smart Crop Guidance -->
-            <div class="glass-panel bento-item bento-large reveal">
-                <div>
-                    <div class="bento-icon"><i class="fa-solid fa-microchip"></i></div>
-                    <h3 class="font-jakarta">Smart AI Crop Guidance</h3>
-                    <p>Input your soil type, region, and season. Our proprietary machine learning models analyze historical yield data and current atmospheric conditions to recommend the most profitable crops to plant next, increasing your harvest success rate by up to 40%.</p>
-                </div>
-                <!-- Mockup UI Element inside card for visual flex -->
-                <div class="mt-4 p-4 rounded-4 w-100" style="background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="text-light fw-bold fs-5">AI Recommendation: <span class="text-emerald-400">Golden Wheat</span></span>
-                        <span class="badge bg-success bg-opacity-25 text-success border border-success p-2 fs-6">98% Match</span>
-                    </div>
-                    <div class="d-flex justify-content-between text-secondary-light mb-2 small fw-semibold">
-                        <span>Analysis Processing</span>
-                        <span>Complete</span>
-                    </div>
-                    <div class="progress" style="height: 8px; background: #1e293b; border-radius: 10px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-emerald-400" role="progressbar" style="width: 98%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Medium Card: Live Weather -->
-            <div class="glass-panel bento-item bento-medium reveal" style="transition-delay: 0.1s;">
-                <div class="bento-icon"><i class="fa-solid fa-cloud-bolt"></i></div>
-                <h3 class="font-jakarta">Precision Weather Radar</h3>
-                <p>Hyper-local forecasts and early warnings for heavy rain, storms, or droughts. Automate your irrigation perfectly.</p>
-                
-                <div class="mt-auto text-center p-4 rounded-4" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.1);">
-                    <i class="fa-solid fa-cloud-sun fs-1 text-warning mb-3"></i>
-                    <h2 class="text-white font-jakarta fw-bold mb-1" style="font-size: 3rem;">32°C</h2>
-                    <span class="text-emerald-400 fw-bold"><i class="fa-solid fa-droplet"></i> 65% Humidity</span>
-                </div>
-            </div>
-
-            <!-- Small Card 1: Market Rates -->
-            <div class="glass-panel bento-item bento-small reveal" style="transition-delay: 0.2s;">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="bento-icon m-0" style="font-size: 1.8rem; padding: 12px;"><i class="fa-solid fa-chart-line"></i></div>
-                    <span class="badge bg-danger bg-opacity-25 text-danger border border-danger">Live</span>
-                </div>
-                <h3 class="font-jakarta fs-4">Real-Time Market</h3>
-                <p class="small mb-0">Track live prices across local Mandis. Never get underpaid again.</p>
-            </div>
-
-            <!-- Small Card 2: Language -->
-            <div class="glass-panel bento-item bento-small reveal" style="transition-delay: 0.3s;">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div class="bento-icon m-0" style="font-size: 1.8rem; padding: 12px;"><i class="fa-solid fa-earth-asia"></i></div>
-                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary">10+</span>
-                </div>
-                <h3 class="font-jakarta fs-4">Regional Ready</h3>
-                <p class="small mb-0">Access the platform in your native language with zero friction.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- INTERACTIVE USER JOURNEY -->
-    <section id="journey" class="journey-section">
+    <section id="features">
         <div class="container">
-            <div class="section-header reveal">
-                <h2 class="section-title font-jakarta text-white">How HarvestIQ Works</h2>
-                <p class="text-secondary-light fs-5">From onboarding to harvest, experience seamless agricultural intelligence.</p>
+            <div class="section-title reveal">
+                <h2>Powerful Farming Intelligence</h2>
+                <p>Everything you need to protect your crops and sell at the best price.</p>
+            </div>
+            <div class="features-grid">
+                <div class="glass-card reveal">
+                    <div class="card-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+                    <h3>Live Weather Alerts</h3>
+                    <p>Get hyper-local forecasts and early warnings for heavy rain or storms so you can plan your irrigation perfectly.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>Real-time Market Rates</h3>
+                    <p>Track live crop prices across local markets to ensure middlemen never underpay you again.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <div class="card-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h3>Smart Crop Guidance</h3>
+                    <p>Input your soil type and season, and let our system recommend the most profitable crops to plant next.</p>
+                </div>
+                <div class="glass-card reveal">
+                    <div class="card-icon"><i class="fa-solid fa-globe"></i></div>
+                    <h3>Regional Languages</h3>
+                    <p>Access the entire platform in your native language with zero technical complexities. Built for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section class="hiw-section">
+        <div class="hiw-header reveal">
+            <span class="hiw-tag"><i class="fa-solid fa-route me-2"></i> User Journey</span>
+            <h2 class="hiw-title">How HarvestIQ Empowers You</h2>
+            <p class="hiw-subtitle">From registering your field to maximizing your profits—experience seamless agricultural intelligence in three simple steps.</p>
+        </div>
+
+        <div class="hiw-grid">
+            <div class="hiw-card reveal" style="margin-top: 35px;">
+                <div class="hiw-step-node">01</div>
+                <div class="hiw-icon"><i class="fa-solid fa-user-check"></i></div>
+                <h3>Set Your Profile</h3>
+                <p>Sign up securely and input your region, soil type, and farming season. HarvestIQ creates a personalized dashboard instantly tailored to your exact needs.</p>
             </div>
 
-            <div class="timeline reveal">
-                <div class="timeline-step">
-                    <div class="step-circle"><i class="fa-solid fa-user-plus"></i></div>
-                    <h4 class="font-jakarta">1. Set Profile</h4>
-                    <p>Register securely. Input your region, soil type, and farming season. We instantly tailor the dashboard to your farm.</p>
-                </div>
-                
-                <div class="timeline-step" style="transition-delay: 0.2s;">
-                    <div class="step-circle"><i class="fa-solid fa-satellite-dish"></i></div>
-                    <h4 class="font-jakarta">2. Sync Live Data</h4>
-                    <p>Fetch real-time atmospheric data and live wholesale Mandi prices directly to your device, even in offline mode.</p>
-                </div>
+            <div class="hiw-card reveal" style="transition-delay: 0.2s; margin-top: 35px;">
+                <div class="hiw-step-node">02</div>
+                <div class="hiw-icon"><i class="fa-solid fa-satellite-dish"></i></div>
+                <h3>Sync Live Data</h3>
+                <p>Our system fetches real-time atmospheric data via Precision Radar and syncs live commodity prices from your nearest wholesale Mandi, even working in offline mode.</p>
+            </div>
 
-                <div class="timeline-step" style="transition-delay: 0.4s;">
-                    <div class="step-circle"><i class="fa-solid fa-leaf"></i></div>
-                    <h4 class="font-jakarta">3. Cultivate Smarter</h4>
-                    <p>Receive predictive AI advisories on when to irrigate, spray pesticides, and sell to bypass middlemen.</p>
+            <div class="hiw-card reveal" style="transition-delay: 0.4s; margin-top: 35px;">
+                <div class="hiw-step-node">03</div>
+                <div class="hiw-icon"><i class="fa-solid fa-microchip"></i></div>
+                <h3>Cultivate Smarter</h3>
+                <p>Receive AI-driven advisories! Know exactly when to spray pesticides, when to irrigate, and when to sell your crops to bypass middlemen and maximize profit.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="mission-section" id="mission">
+        <div class="container">
+            <div class="section-title reveal">
+                <h2>Driven By Purpose</h2>
+                <p>Technology rooted in the soil — built for the people who feed the nation.</p>
+            </div>
+            <div class="mission-grid">
+                <div class="glass-card reveal">
+                    <div class="card-icon" style="color: var(--hiq-amber, #f59e0b); background: rgba(245, 158, 11, 0.12);"><i class="fa-solid fa-bullseye"></i></div>
+                    <h3>Our Mission</h3>
+                    <p>To bridge the digital gap in agriculture by providing farmers with transparent, real-time, and actionable data.</p>
+                </div>
+                <div class="glass-card reveal" style="transition-delay: 0.2s;">
+                    <div class="card-icon"><i class="fa-solid fa-earth-asia"></i></div>
+                    <h3>Our Vision</h3>
+                    <p>A future where every farmer, regardless of their farm size, maximizes their yield and achieves financial freedom.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- REAL-WORLD IMPACT SECTION -->
-    <section id="impact" class="impact-section">
-        <div class="impact-card reveal">
-            <h2 class="font-jakarta text-gradient">Driven by Impact</h2>
-            <p>We built HarvestIQ to empower the people who feed the nation. By providing transparent data and predictive analytics, we are leveling the playing field for rural farmers against exploitative middlemen.</p>
-            
-            <div class="impact-stats mt-5">
-                <div class="impact-stat-item">
-                    <h3 class="font-jakarta">1.2M+</h3>
-                    <span>Farmers Reached</span>
-                </div>
-                <div class="impact-stat-item">
-                    <h3 class="font-jakarta">28%</h3>
-                    <span>Avg. Yield Increase</span>
-                </div>
-                <div class="impact-stat-item">
-                    <h3 class="font-jakarta">₹45B</h3>
-                    <span>Middleman Margins Saved</span>
-                </div>
-            </div>
-            
-            <div class="mt-5 pt-4">
-                <?php if(!isset($_SESSION['user_id'])): ?>
-                    <button onclick="openAuthModal('signupModal')" class="btn-neon" style="padding: 20px 50px; font-size: 1.2rem;">Join the Movement</button>
-                <?php else: ?>
-                    <a href="dashboard.php" class="btn-neon" style="padding: 20px 50px; font-size: 1.2rem;">Go to Dashboard</a>
-                <?php endif; ?>
-            </div>
-        </div>
+    <section class="cta-section reveal" id="contact">
+        <h2>Ready to Transform Your Farm?</h2>
+        <p>Join the growing community of smart farmers using HarvestIQ to cultivate better futures.</p>
+        <?php if(!isset($_SESSION['user_id'])): ?>
+            <button onclick="openAuthModal('signupModal')" class="btn-premium btn-primary-glow" style="font-size: 1.1rem; padding: 16px 40px;">
+                Start Your Journey Now
+            </button>
+        <?php else: ?>
+            <a href="dashboard.php" class="btn-premium btn-primary-glow" style="font-size: 1.1rem; padding: 16px 40px;">
+                Go to Workspace
+            </a>
+        <?php endif; ?>
     </section>
 
-    <!-- Footer Placeholder -->
-    <?php // include 'footer.php'; ?>
-    <?php // include 'login_signup.php'; ?>
-    <footer class="text-center py-5 border-top" style="border-color: rgba(255,255,255,0.05) !important;">
-        <p class="text-secondary-light mb-0 fw-semibold">&copy; <?= date('Y') ?> HarvestIQ. Cultivate Smarter Decisions.</p>
-    </footer>
+    <?php include 'footer.php'; ?>
+    <?php include 'login_signup.php'; ?>
 
-    <!-- Bootstrap JS for functionalities (Assuming user relies on it) -->
-    <!-- Make sure to keep the user's scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Animation and Progress Script -->
     <script>
-        // Smooth Progress Bar logic
         const pb = document.getElementById('progressBar');
-        if (pb) {
-            window.addEventListener('scroll', () => {
-                const d = document.documentElement;
-                pb.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100 + '%';
-            });
-        }
+        window.addEventListener('scroll', () => {
+            const d = document.documentElement;
+            pb.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100 + '%';
+        });
 
-        // Advanced Scroll Reveal Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.12 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
 
-        // PWA Service Worker check
+    <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
+                    console.log('ServiceWorker registered successfully.');
+                }).catch(err => {
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });
