@@ -413,17 +413,17 @@ $alerts_json = json_encode($active_alerts);
           <div class="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary border-opacity-25 pb-3">
             <div class="d-flex align-items-center gap-3">
               <div class="bg-success bg-opacity-10 p-3 rounded-circle" id="advisoryIconBg">
-                <i class="fa-solid fa-microchip fs-3 text-success" id="advisoryIcon"></i>
+                <i class="fa-solid fa-lightbulb fs-3 text-success" id="advisoryIcon"></i>
               </div>
               <div>
-                <h5 class="fw-bold mb-0">AI Agronomist</h5>
-                <small class="text-muted fw-semibold">Real-time crop intelligence</small>
+                <h5 class="fw-bold mb-0">Smart Farming Guide</h5>
+                <small class="text-muted fw-semibold">Live advice for your crops</small>
               </div>
             </div>
             <span class="badge bg-success px-4 py-2 rounded-pill fs-6 shadow-sm" id="riskBadge">Risk: Low</span>
           </div>
           <p class="fs-5 fw-medium mb-0" id="advisoryText" style="line-height:1.85; color: var(--text-muted);">
-            Awaiting satellite coordinates to generate custom agricultural insights…
+Please search or locate your field to get helpful farming tips based on today's weather...
           </p>
         </div>
 
@@ -436,42 +436,58 @@ $alerts_json = json_encode($active_alerts);
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // --- 🚨 DISPLAY ALL ACTIVE ALERTS 🚨 ---
-    const dbAlerts = <?php echo $alerts_json; ?>;
+   // --- 🚨 DISPLAY ALL ACTIVE ALERTS WITH DATE & TIME 🚨 ---
+const dbAlerts = <?php echo $alerts_json; ?>;
 
-    function renderAllAlerts() {
-        const alertsContainer = document.getElementById('dynamicAlertsContainer');
-        const mainWrapper = document.getElementById('mainWrapper');
+function renderAllAlerts() {
+    const alertsContainer = document.getElementById('dynamicAlertsContainer');
+    const mainWrapper = document.getElementById('mainWrapper');
 
-        if (dbAlerts && dbAlerts.length > 0) {
-            let alertsHTML = '';
+    if (dbAlerts && dbAlerts.length > 0) {
+        let alertsHTML = '';
+        
+        dbAlerts.forEach((alert, index) => {
+            let marginStyle = (index === dbAlerts.length - 1) ? 'margin-bottom: 30px;' : 'margin-bottom: 15px;';
             
-            dbAlerts.forEach((alert, index) => {
-                let marginStyle = (index === dbAlerts.length - 1) ? 'margin-bottom: 30px;' : 'margin-bottom: 15px;';
+            // Date & Time Formatting (Hackathon Premium Feature)
+            let timeBadge = '';
+            if(alert.expires_at) {
+                const expiryDate = new Date(alert.expires_at.replace(/-/g, '/')); // iOS/Safari compatibility
+                const formattedDate = expiryDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+                const formattedTime = expiryDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
                 
-                alertsHTML += `
-                <div class="premium-alert-banner" id="alert-banner-${index}" style="${marginStyle}">
-                    <div class="alert-content-wrapper">
-                        <div class="alert-pulse-icon"><i class="fa-solid fa-tower-broadcast"></i></div>
-                        <div class="alert-text-content">
-                            <h6>🚨 Admin Emergency Broadcast <span class="badge bg-white text-danger ms-2" style="font-size: 0.75rem; padding: 4px 10px;">For: ${alert.target_area}</span></h6>
-                            <p>${alert.message}</p>
-                        </div>
-                    </div>
-                    <button class="alert-dismiss-btn" onclick="document.getElementById('alert-banner-${index}').style.display='none';"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                `;
-            });
+                timeBadge = `<span class="badge bg-dark text-warning ms-2" style="font-size: 0.75rem; border: 1px solid rgba(255,193,7,0.4);"><i class="fa-regular fa-clock me-1"></i> Valid until: ${formattedDate}, ${formattedTime}</span>`;
+            } else {
+                timeBadge = `<span class="badge bg-dark text-info ms-2" style="font-size: 0.75rem; border: 1px solid rgba(13,202,240,0.4);"><i class="fa-solid fa-circle-exclamation me-1"></i> Until Further Notice</span>`;
+            }
             
-            alertsContainer.innerHTML = alertsHTML;
-            alertsContainer.style.display = 'block';
-            mainWrapper.style.paddingTop = '10px'; 
-        } else {
-            alertsContainer.innerHTML = '';
-            alertsContainer.style.display = 'none';
-            mainWrapper.style.paddingTop = '110px'; 
-        }
+            alertsHTML += `
+            <div class="premium-alert-banner" id="alert-banner-${index}" style="${marginStyle}">
+                <div class="alert-content-wrapper">
+                    <div class="alert-pulse-icon"><i class="fa-solid fa-tower-broadcast"></i></div>
+                    <div class="alert-text-content">
+                        <h6>
+                            🚨 Emergency Broadcast 
+                            <span class="badge bg-white text-danger ms-2" style="font-size: 0.75rem; padding: 4px 10px;">📍 For: ${alert.target_area}</span>
+                            ${timeBadge}
+                        </h6>
+                        <p>${alert.message}</p>
+                    </div>
+                </div>
+                <button class="alert-dismiss-btn" onclick="document.getElementById('alert-banner-${index}').style.display='none';"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            `;
+        });
+        
+        alertsContainer.innerHTML = alertsHTML;
+        alertsContainer.style.display = 'block';
+        mainWrapper.style.paddingTop = '10px'; 
+    } else {
+        alertsContainer.innerHTML = '';
+        alertsContainer.style.display = 'none';
+        mainWrapper.style.paddingTop = '110px'; 
     }
+}
 
     // --- LEAFLET MAP LOGIC (Dark/Light Mode Compatible) ---
     let map = null, marker = null;
