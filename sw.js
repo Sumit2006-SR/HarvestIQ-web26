@@ -1,4 +1,4 @@
-const CACHE_NAME = 'harvestiq-pwa-v1';
+const CACHE_NAME = 'harvestiq-offline-v1';
 const urlsToCache = [
     './',
     './index.php',
@@ -9,28 +9,23 @@ const urlsToCache = [
     './assets/css/bootstrap.min.css',
     './assets/css/all.min.css',
     './assets/js/theme.js',
-    './assets/logo-192.png'
+    './assets/logo-192.png',
+    './assets/logo-512.png'
 ];
 
-// Install Event - Caching core files
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            return cache.addAll(urlsToCache);
-        })
+        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
     );
     self.skipWaiting();
 });
 
-// Activate Event - Clearing old caches
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
+                    if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
                 })
             );
         })
@@ -38,12 +33,19 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
-// Fetch Event - Serve from Cache first, then Network
 self.addEventListener('fetch', event => {
+     if (!(event.request.url.indexOf('http') === 0)) return;
+
     event.respondWith(
         caches.match(event.request).then(response => {
-            return response || fetch(event.request).catch(() => {
-                console.log("You are offline!");
+             if (response) return response;
+
+             return fetch(event.request).catch(() => {
+                 console.log("Offline mode detected for:", event.request.url);
+                return new Response('You are offline. Please check your connection.', {
+                    status: 200,
+                    headers: { 'Content-Type': 'text/plain' }
+                });
             });
         })
     );

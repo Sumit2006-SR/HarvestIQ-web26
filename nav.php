@@ -823,7 +823,7 @@ font {
 
 
 .weather-main-container {
-    padding-top: 100px; /* ন্যাভবারের নিচে যাতে কন্টেন্ট থাকে */
+    padding-top: 100px;  
     position: relative;
     z-index: 1;
 }
@@ -832,8 +832,8 @@ font {
 <div class="sz-nav-wrapper sz-navbar-scope" id="mainNavbarWrapper">
         <nav class="sz-nav-inner" id="mainNavbarInner">
       <a href="index.php" class="sz-brand notranslate" style="display: flex; align-items: center; white-space: nowrap; text-decoration: none;">
-    <div class="brand-icon-box">
-        <i class="fa-solid fa-seedling brand-icon"></i>
+    <div class="icon-box" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+        <img src="assets/logo-192.png" alt="HarvestIQ Logo" class="brand-logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0px 4px 8px rgba(22, 163, 74, 0.3)); transition: transform 0.3s ease;">
     </div>
     <div class="brand-text notranslate" style="white-space: nowrap;">Harvest<span>IQ</span></div>
 </a>
@@ -1387,3 +1387,14 @@ document.addEventListener("DOMContentLoaded", function() {
     
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Offline system active!'))
+                .catch(err => console.log('Offline system failed:', err));
+        });
+    }
+</script>
