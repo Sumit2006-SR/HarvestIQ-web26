@@ -1,4 +1,8 @@
 <?php
+ if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require 'db.php';
 header('Content-Type: application/json'); 
 
@@ -18,14 +22,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = mysqli_fetch_assoc($result);
             
             if (password_verify($password, $user['password'])) {
-                session_regenerate_id(true);
+                 session_regenerate_id(true);
                 
-                $_SESSION['user_id'] = $user['id'];
+                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['role'] = $user['role']; 
                 $_SESSION['full_name'] = $user['full_name'];  
                 $_SESSION['is_logged_in'] = true;
                 
-                 $redirect = ($user['role'] == 'admin') ? "admin/admin_dashboard.php" : "index.php";
+                 session_write_close();
+                
+                $redirect = ($user['role'] == 'admin') ? "admin/admin_dashboard.php" : "index.php";
                 
                 echo json_encode(['success' => true, 'redirect' => $redirect]);
                 exit();
