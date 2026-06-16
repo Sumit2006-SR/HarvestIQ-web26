@@ -86,254 +86,238 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HarvestIQ | AI Crop Engine</title>
-    
-    <script>(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('harvestiq-theme')||'light');}catch(e){}})();</script>
+    <title>AI Crop Advisor | HarvestIQ</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=6.0">
+    <link rel="stylesheet" href="style.css?v=7.0">
 
     <style>
         /* =========================================
-           1. PERFECT LIGHT/DARK THEME VARIABLES
+           ULTRA-PREMIUM DASHBOARD SYNC THEME
            ========================================= */
         :root {
-            --brand-primary: #10b981;
-            --brand-secondary: #059669;
-            --bg-main: #f8fafc;
-            --bg-card: rgba(255, 255, 255, 0.85);
-            --bg-input: #f1f5f9;
-            --border-glass: rgba(15, 23, 42, 0.08);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --metric-bg: rgba(241, 245, 249, 0.8);
-            --card-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+            --hiq-bg: #0B1120;
+            --hiq-surface: rgba(30, 41, 59, 0.4);
+            --hiq-surface-hover: rgba(30, 41, 59, 0.7);
+            --hiq-border: rgba(255, 255, 255, 0.08);
+            --hiq-text-main: #f8fafc;
+            --hiq-text-soft: #94a3b8;
+            --hiq-accent: #10b981;
+            --hiq-accent-glow: rgba(16, 185, 129, 0.15);
+            --hiq-input-bg: rgba(15, 23, 42, 0.6);
         }
 
-        [data-theme="dark"] {
-            --brand-primary: #10b981;
-            --brand-secondary: #34d399;
-            --bg-main: #020617;
-            --bg-card: rgba(15, 23, 42, 0.5);
-            --bg-input: rgba(30, 41, 59, 0.5);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --metric-bg: rgba(255, 255, 255, 0.03);
-            --card-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        [data-theme="light"] {
+            --hiq-bg: #f8fafc;
+            --hiq-surface: rgba(255, 255, 255, 0.9);
+            --hiq-surface-hover: #ffffff;
+            --hiq-border: rgba(0, 0, 0, 0.08);
+            --hiq-text-main: #0f172a;
+            --hiq-text-soft: #64748b;
+            --hiq-input-bg: #ffffff;
         }
 
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
+            background-color: var(--hiq-bg);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.06), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.06), transparent 25%);
+            color: var(--hiq-text-main);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        /* Overriding Bootstrap text-muted for theme consistency */
-        .text-muted { color: var(--text-muted) !important; }
+        .text-muted { color: var(--hiq-text-soft) !important; }
+        .text-main { color: var(--hiq-text-main) !important; }
 
         .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* =========================================
-           2. HEADER & FORM PANEL
+           HEADER & INPUT FORM (GLASSMORPHISM)
            ========================================= */
-        .engine-header { padding: 140px 20px 60px; text-align: center; }
-        .engine-title { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 900; letter-spacing: -1px; margin-bottom: 15px; }
-        .engine-title span { background: linear-gradient(135deg, var(--brand-primary), #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .engine-header { padding: 140px 20px 50px; text-align: center; }
+        .engine-title { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; color: var(--hiq-text-main); }
+        .engine-title span { color: var(--hiq-accent); }
 
         .glass-panel {
-            background: var(--bg-card); backdrop-filter: blur(24px); border: 1px solid var(--border-glass);
-            border-radius: 32px; padding: 50px 40px; box-shadow: var(--card-shadow); position: relative; z-index: 5;
+            background: var(--hiq-surface);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--hiq-border);
+            border-radius: 24px; padding: 40px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             transition: 0.3s;
         }
 
-        .form-label { font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;}
-        .form-label i { color: var(--brand-primary); font-size: 1.1rem;}
+        .form-label { font-weight: 600; color: var(--hiq-text-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;}
+        .form-label i { color: var(--hiq-accent); font-size: 1.1rem;}
 
         .form-select, .form-control {
-            background-color: var(--bg-input); border: 1px solid var(--border-glass); color: var(--text-main);
-            border-radius: 16px; padding: 16px 20px; font-weight: 500; font-size: 1rem; transition: 0.3s;
+            background-color: var(--hiq-input-bg); border: 1px solid var(--hiq-border); color: var(--hiq-text-main);
+            border-radius: 14px; padding: 14px 18px; font-weight: 500; font-size: 1rem; transition: 0.3s;
         }
         .form-select:focus, .form-control:focus {
-            background-color: var(--bg-card); border-color: var(--brand-primary); box-shadow: 0 0 0 4px rgba(16,185,129,0.15); color: var(--text-main);
+            background-color: var(--hiq-surface); border-color: var(--hiq-accent); box-shadow: 0 0 0 4px rgba(16,185,129,0.15); color: var(--hiq-text-main);
         }
         
-        /* Dropdown options styling for dark mode */
-        [data-theme="dark"] .form-select option { background: #0f172a; color: #fff; }
+        [data-theme="dark"] .form-select option { background: #0B1120; color: #fff; }
 
         .btn-run-ai {
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary)); color: white; border: none; padding: 20px;
-            border-radius: 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.2rem;
-            width: 100%; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 30px rgba(16,185,129,0.3); position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 18px;
+            border-radius: 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.1rem;
+            width: 100%; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 25px rgba(16,185,129,0.25);
         }
-        .btn-run-ai:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(16,185,129,0.5); }
+        .btn-run-ai:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(16,185,129,0.4); }
         
         .ai-terminal { display: none; text-align: center; }
         .btn-run-ai.loading .btn-content { display: none; }
-        .btn-run-ai.loading .ai-terminal { display: block; font-family: monospace; font-size: 1rem; color: #fff; letter-spacing: 0.5px;}
+        .btn-run-ai.loading .ai-terminal { display: block; font-family: 'Inter', monospace; font-size: 1rem; color: #fff; }
 
         /* =========================================
-           3. RESULTS & METRICS (FIXED OVERFLOW)
+           RESULTS DASHBOARD CARDS
            ========================================= */
         .result-card {
-            background: var(--bg-card); border: 1px solid var(--border-glass); border-radius: 32px;
-            padding: 35px; margin-bottom: 30px; transition: 0.4s; position: relative; overflow: hidden;
-            backdrop-filter: blur(20px); box-shadow: var(--card-shadow);
+            background: var(--hiq-surface); border: 1px solid var(--hiq-border); border-radius: 24px;
+            padding: 30px; margin-bottom: 25px; transition: 0.4s; position: relative; overflow: hidden;
+            backdrop-filter: blur(20px);
         }
-        .result-card:hover { transform: translateY(-5px); border-color: rgba(16,185,129,0.4); box-shadow: 0 25px 60px rgba(0,0,0,0.15); }
+        .result-card:hover { transform: translateY(-4px); background: var(--hiq-surface-hover); border-color: rgba(16,185,129,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
         
-        .best-match { border: 2px solid var(--brand-primary); box-shadow: 0 0 30px rgba(16,185,129,0.1); }
-        .best-match::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top left, rgba(16,185,129,0.05), transparent 50%); pointer-events: none; }
+        .best-match { border: 1px solid var(--hiq-accent); box-shadow: 0 0 30px rgba(16,185,129,0.1); }
+        .best-match::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top left, rgba(16,185,129,0.08), transparent 40%); pointer-events: none; }
         
-        /* Fixed Ribbon */
         .ribbon { 
-            position: absolute; top: 25px; right: -35px; background: var(--brand-primary); color: #fff; 
-            font-family: 'Plus Jakarta Sans'; font-weight: 900; font-size: 0.75rem; padding: 6px 40px; 
-            transform: rotate(45deg); box-shadow: 0 5px 15px rgba(16,185,129,0.3); letter-spacing: 1px; z-index: 10;
+            position: absolute; top: 20px; right: -35px; background: var(--hiq-accent); color: #fff; 
+            font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 0.7rem; padding: 5px 40px; 
+            transform: rotate(45deg); box-shadow: 0 4px 12px rgba(16,185,129,0.3); letter-spacing: 1px; z-index: 10;
         }
 
-        .crop-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 25px; border-bottom: 1px solid var(--border-glass); padding-bottom: 25px;}
-        .crop-icon { font-size: 4rem; filter: drop-shadow(0 10px 20px rgba(16,185,129,0.2)); }
-        .crop-title h3 { font-size: clamp(1.8rem, 3vw, 2.2rem); font-weight: 800; margin: 0; color: var(--text-main);}
-        .crop-duration { color: var(--brand-primary); font-weight: 700; font-size: 0.95rem; margin-top: 5px; }
+        .crop-header { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; border-bottom: 1px solid var(--hiq-border); padding-bottom: 20px;}
+        .crop-icon { font-size: 3.5rem; filter: drop-shadow(0 8px 15px rgba(16,185,129,0.2)); }
+        .crop-title h3 { font-size: 1.8rem; font-weight: 800; margin: 0; color: var(--hiq-text-main);}
+        .crop-duration { color: var(--hiq-accent); font-weight: 600; font-size: 0.9rem; margin-top: 4px; }
 
-        /* Fixed Metrics Grid (No Overflow) */
+        /* Metrics Grid */
         .metrics-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
             gap: 15px; 
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .metric-box { 
-            background: var(--metric-bg); border: 1px solid var(--border-glass); 
-            padding: 20px 15px; border-radius: 20px; transition: 0.3s;
-            display: flex; flex-direction: column; justify-content: center;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--hiq-border); 
+            padding: 18px 15px; border-radius: 16px; transition: 0.3s;
         }
-        .metric-box:hover { background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2);}
+        .metric-box:hover { background: rgba(16,185,129,0.04); border-color: rgba(16,185,129,0.2);}
         
-        .m-lbl { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;}
-        
-        /* Fluid Typography for Prices */
-        .m-val { 
-            font-size: clamp(1.1rem, 2vw, 1.5rem); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            font-weight: 800; 
-            color: var(--text-main);
-            word-break: break-word; /* Prevents overflow */
-            line-height: 1.2;
-        }
-        
-        .m-profit { color: var(--brand-primary); }
+        .m-lbl { font-size: 0.75rem; color: var(--hiq-text-soft); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;}
+        .m-val { font-size: 1.4rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--hiq-text-main); word-break: break-word; line-height: 1.2;}
+        .m-profit { color: var(--hiq-accent); }
 
-        .insight-box { background: rgba(16,185,129,0.05); border-left: 4px solid var(--brand-primary); padding: 20px; border-radius: 0 16px 16px 0; margin-bottom: 25px;}
-        .insight-box h6 { color: var(--text-main); font-weight: 800; margin-bottom: 10px; font-size: 1.05rem;}
-        .insight-box p { color: var(--text-muted); font-size: 0.95rem; margin: 0; line-height: 1.6;}
+        /* Advisory Insight Box */
+        .insight-box { background: rgba(16,185,129,0.05); border-left: 3px solid var(--hiq-accent); padding: 18px 20px; border-radius: 0 12px 12px 0; margin-bottom: 25px;}
+        .insight-box h6 { color: var(--hiq-text-main); font-weight: 700; margin-bottom: 8px; font-size: 1rem;}
+        .insight-box p { color: var(--hiq-text-soft); font-size: 0.95rem; margin: 0; line-height: 1.6;}
 
         /* Circular Progress */
-        .circular-chart { display: block; margin: 0 auto; max-width: 140px; max-height: 140px; }
-        .circle-bg { fill: none; stroke: var(--border-glass); stroke-width: 3.8; }
+        .circular-chart { display: block; margin: 0 auto; max-width: 130px; max-height: 130px; }
+        .circle-bg { fill: none; stroke: var(--hiq-border); stroke-width: 3.5; }
         .circle { fill: none; stroke-width: 2.8; stroke-linecap: round; animation: progress 1.5s ease-out forwards; }
-        .percentage { fill: var(--text-main); font-family: 'Plus Jakarta Sans'; font-size: 0.5em; text-anchor: middle; font-weight: 900; }
-        .score-lbl { fill: var(--text-muted); font-family: 'Inter'; font-size: 0.18em; text-anchor: middle; font-weight: 600; letter-spacing: 1px;}
+        .percentage { fill: var(--hiq-text-main); font-family: 'Plus Jakarta Sans'; font-size: 0.5em; text-anchor: middle; font-weight: 800; }
+        .score-lbl { fill: var(--hiq-text-soft); font-family: 'Inter'; font-size: 0.16em; text-anchor: middle; font-weight: 600; letter-spacing: 1px;}
         @keyframes progress { 0% { stroke-dasharray: 0 100; } }
 
-        .risk-badge { padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; border: 1px solid;}
-        .risk-success { background: rgba(16,185,129,0.1); color: var(--brand-primary); border-color: rgba(16,185,129,0.3); }
-        .risk-warning { background: rgba(245,158,11,0.1); color: #fbbf24; border-color: rgba(245,158,11,0.3); }
-        .risk-danger { background: rgba(239,68,68,0.1); color: #ef4444; border-color: rgba(239,68,68,0.3); }
-        .risk-info { background: rgba(59,130,246,0.1); color: #3b82f6; border-color: rgba(59,130,246,0.3); }
+        .risk-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid;}
+        .risk-success { background: rgba(16,185,129,0.1); color: var(--hiq-accent); border-color: rgba(16,185,129,0.2); }
+        .risk-warning { background: rgba(245,158,11,0.1); color: #fbbf24; border-color: rgba(245,158,11,0.2); }
+        .risk-danger { background: rgba(239,68,68,0.1); color: #ef4444; border-color: rgba(239,68,68,0.2); }
+        .risk-info { background: rgba(59,130,246,0.1); color: #3b82f6; border-color: rgba(59,130,246,0.2); }
 
         .btn-outline-custom {
-            border: 2px solid var(--border-glass); color: var(--text-main); background: transparent;
-            padding: 10px 24px; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s;
+            border: 1px solid var(--hiq-border); color: var(--hiq-text-main); background: var(--hiq-surface);
+            padding: 10px 24px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; font-size: 0.9rem;
         }
-        .btn-outline-custom:hover { background: var(--text-main); color: var(--bg-main); }
+        .btn-outline-custom:hover { background: var(--hiq-surface-hover); border-color: var(--hiq-accent); }
     </style>
 </head>
 
 <body>
     <?php include "nav.php" ?>
 
-   <div class="engine-header reveal active">
-    <div class="container">
-        <h1 class="engine-title">Crop <span>Advisor</span></h1>
-        <p class="lead text-muted mx-auto" style="max-width: 650px;">
-            Tell us about your soil and season. We will help you choose the right crop to get a better harvest and profit.
-        </p>
+    <div class="engine-header reveal active">
+        <div class="container">
+            <h1 class="engine-title">Crop <span>Advisor</span></h1>
+            <p class="lead text-muted mx-auto" style="max-width: 650px;">
+                Tell us about your soil and season. We will help you choose the right crop to get a better harvest and profit.
+            </p>
+        </div>
     </div>
-</div>
 
-    <div class="container pb-5">
+    <div class="container pb-5" style="max-width: 1100px;">
         <?php if (!$is_submitted): ?>
-            <!-- ================= INPUT FORM ================= -->
             <div class="row justify-content-center reveal active">
-                <div class="col-lg-10">
+                <div class="col-lg-12">
                     <div class="glass-panel">
                         <form method="POST" id="aiForm" onsubmit="runAIEngine(event)">
-                            <div class="row g-4 mb-5">
-                              <div class="col-md-6">
-    <label class="form-label"><i class="fas fa-seedling"></i> What is your soil type?</label>
-    <select class="form-select" name="soil_type" required>
-        <option value="" disabled selected>Choose your soil...</option>
-        <option value="Loamy">Loamy (Fertile & Balanced)</option>
-        <option value="Clay">Clay (Holds water well)</option>
-        <option value="Sandy">Sandy (Drains water quickly)</option>
-    </select>
-</div>
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fas fa-seedling"></i> What is your soil type?</label>
+                                    <select class="form-select" name="soil_type" required>
+                                        <option value="" disabled selected>Choose your soil...</option>
+                                        <option value="Loamy">Loamy (Fertile & Balanced)</option>
+                                        <option value="Clay">Clay (Holds water well)</option>
+                                        <option value="Sandy">Sandy (Drains water quickly)</option>
+                                    </select>
+                                </div>
 
-<div class="col-md-6">
-    <label class="form-label"><i class="fas fa-cloud-sun"></i> Current Season</label>
-    <select class="form-select" name="season" required>
-        <option value="" disabled selected>Select season...</option>
-        <option value="Rabi">Rabi (Winter Season)</option>
-        <option value="Kharif">Kharif (Monsoon Season)</option>
-    </select>
-</div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fas fa-cloud-sun"></i> Current Season</label>
+                                    <select class="form-select" name="season" required>
+                                        <option value="" disabled selected>Select season...</option>
+                                        <option value="Rabi">Rabi (Winter Season)</option>
+                                        <option value="Kharif">Kharif (Monsoon Season)</option>
+                                    </select>
+                                </div>
 
-<div class="col-md-6">
-    <label class="form-label"><i class="fas fa-tint"></i> Water Access</label>
-    <select class="form-select" name="water" required>
-        <option value="" disabled selected>How is your water access?</option>
-        <option value="Low">Low (Depends on rain)</option>
-        <option value="Medium">Medium (Need support for water)</option>
-        <option value="High">High (Plenty of water)</option>
-    </select>
-</div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fas fa-tint"></i> Water Access</label>
+                                    <select class="form-select" name="water" required>
+                                        <option value="" disabled selected>How is your water access?</option>
+                                        <option value="Low">Low (Depends on rain)</option>
+                                        <option value="Medium">Medium (Need support for water)</option>
+                                        <option value="High">High (Plenty of water)</option>
+                                    </select>
+                                </div>
 
-<div class="col-md-6">
-    <label class="form-label"><i class="fas fa-tractor"></i> Farm Size (Acres)</label>
-    <input type="number" step="0.1" min="0.1" class="form-control" name="land_size" placeholder="e.g. 2.5" required>
-</div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><i class="fas fa-tractor"></i> Farm Size (Acres)</label>
+                                    <input type="number" step="0.1" min="0.1" class="form-control" name="land_size" placeholder="e.g. 2.5" required>
+                                </div>
                             </div>
-                           <button type="submit" class="btn-run-ai" id="submitBtn">
-    <span class="btn-content"><i class="fas fa-search me-2"></i> Find Best Crop</span>
-    <div class="ai-terminal" id="terminalText">Checking soil data...</div>
-</button>
+                            <button type="submit" class="btn-run-ai" id="submitBtn">
+                                <span class="btn-content"><i class="fas fa-search me-2"></i> Find Best Crop</span>
+                                <div class="ai-terminal" id="terminalText">Checking soil data...</div>
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
         <?php else: ?>
-            <!-- ================= RESULTS DASHBOARD ================= -->
             <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 reveal active gap-3">
                 <div>
-                    <h2 class="fw-bold mb-2 text-main">Analysis Complete</h2>
-                    <p class="text-muted m-0"><i class="fas fa-check-circle text-success me-2"></i> Derived top recommendations for <?php echo htmlspecialchars($user_land_size); ?> acres of <?php echo htmlspecialchars($user_soil); ?> soil.</p>
+                    <h2 class="fw-bold mb-1 text-main">Analysis Complete</h2>
+                    <p class="text-muted m-0"><i class="fas fa-check-circle text-success me-2"></i> Recommendations for <?php echo htmlspecialchars($user_land_size); ?> acres of <?php echo htmlspecialchars($user_soil); ?> soil.</p>
                 </div>
-<a href="crop_recommendation.php" class="btn-outline-custom"><i class="fas fa-redo me-2"></i> New Search</a>
+                <a href="crop_recommendation.php" class="btn-outline-custom"><i class="fas fa-redo me-2"></i> New Search</a>
             </div>
 
             <?php if (count($recommendations) > 0): ?>
@@ -347,23 +331,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <?php if ($index == 0): ?><div class="ribbon">TOP MATCH</div><?php endif; ?>
 
                         <div class="row align-items-center">
-                            <!-- Left: Score -->
-                            <div class="col-lg-3 col-md-4 text-center border-end border-secondary border-opacity-25 mb-4 mb-md-0 d-flex flex-column justify-content-center">
+                            <div class="col-lg-3 col-md-4 text-center border-end border-secondary border-opacity-10 mb-4 mb-md-0 d-flex flex-column justify-content-center">
                                 <svg viewBox="0 0 36 36" class="circular-chart">
                                     <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                     <path class="circle" stroke="<?php echo $circle_color; ?>" stroke-dasharray="<?php echo $dash_val; ?>" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                     <text x="18" y="19" class="percentage"><?php echo $crop['match_score']; ?>%</text>
-<text x="18" y="25" class="score-lbl">BEST FIT</text>
+                                    <text x="18" y="25" class="score-lbl">BEST FIT</text>
                                 </svg>
                             </div>
 
-                            <!-- Right: Details -->
                             <div class="col-lg-9 col-md-8 ps-md-4">
                                 <div class="crop-header flex-column flex-sm-row">
                                     <div class="crop-icon"><?php echo $crop['icon']; ?></div>
                                     <div class="crop-title">
                                         <h3><?php echo htmlspecialchars($crop['name']); ?></h3>
-                                        <div class="crop-duration"><i class="far fa-clock me-1"></i> <?php echo htmlspecialchars($crop['duration']); ?> Harvest Cycle</div>
+                                        <div class="crop-duration"><i class="far fa-clock me-1"></i> <?php echo htmlspecialchars($crop['duration']); ?> Days Harvest Cycle</div>
                                     </div>
                                     <div class="ms-sm-auto text-sm-end mt-3 mt-sm-0">
                                         <div class="risk-badge risk-<?php echo $crop['risk_color']; ?> mb-2">
@@ -371,34 +353,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                         <br>
                                         <div class="risk-badge risk-info">
-                                            <i class="fas fa-tint"></i> <?php echo $crop['water_efficiency']; ?>
+                                            <i class="fas fa-droplet"></i> <?php echo $crop['water_efficiency']; ?>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="insight-box">
-    <h6><i class="fas fa-leaf text-success me-2"></i> Why this crop?</h6>
-    <p><?php echo htmlspecialchars($crop['reason']); ?></p>
-</div>
+                                    <h6><i class="fas fa-leaf text-success me-2"></i> Why this crop?</h6>
+                                    <p><?php echo htmlspecialchars($crop['reason']); ?></p>
+                                </div>
 
-<div class="metrics-grid">
-    <div class="metric-box">
-        <div class="m-lbl">Estimated Cost</div>
-        <div class="m-val text-danger">₹<?php echo number_format($crop['total_cost']); ?></div>
-    </div>
-    <div class="metric-box">
-        <div class="m-lbl">Expected Sales</div>
-        <div class="m-val text-info">₹<?php echo number_format($crop['total_revenue']); ?></div>
-    </div>
-    <div class="metric-box">
-        <div class="m-lbl">Expected Yield</div>
-        <div class="m-val"><?php echo number_format($crop['calculated_yield']); ?> <span class="fs-6 text-muted fw-normal">kg</span></div>
-    </div>
-    <div class="metric-box" style="background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3);">
-        <div class="m-lbl text-success">Your Profit</div>
-        <div class="m-val m-profit">₹<?php echo number_format($crop['net_profit']); ?></div>
-    </div>
-</div>
+                                <div class="metrics-grid">
+                                    <div class="metric-box">
+                                        <div class="m-lbl">Estimated Cost</div>
+                                        <div class="m-val text-danger">₹<?php echo number_format($crop['total_cost']); ?></div>
+                                    </div>
+                                    <div class="metric-box">
+                                        <div class="m-lbl">Expected Sales</div>
+                                        <div class="m-val text-info">₹<?php echo number_format($crop['total_revenue']); ?></div>
+                                    </div>
+                                    <div class="metric-box">
+                                        <div class="m-lbl">Expected Yield</div>
+                                        <div class="m-val"><?php echo number_format($crop['calculated_yield']); ?> <span class="fs-6 text-muted fw-normal">kg</span></div>
+                                    </div>
+                                    <div class="metric-box" style="background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2);">
+                                        <div class="m-lbl text-success">Your Profit</div>
+                                        <div class="m-val m-profit">₹<?php echo number_format($crop['net_profit']); ?></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -406,10 +387,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="glass-panel text-center py-5 reveal active">
-                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem; margin-bottom: 20px;"></i>
-                    <h3 class="fw-bold">No Sustainable Match Found</h3>
-                    <p class="text-muted max-w-50 mx-auto">The telemetry parameters provided (specifically water availability) carry a 90%+ failure risk for traditional crops in this soil type. We recommend adjusting parameters or exploring alternative drought-resistant cultivation.</p>
-                    <a href="crop_recommendation.php" class="btn btn-outline-light rounded-pill px-5 mt-4 fw-bold">Adjust Parameters</a>
+                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3.5rem; margin-bottom: 15px;"></i>
+                    <h3 class="fw-bold text-main">No Sustainable Match Found</h3>
+                    <p class="text-muted mx-auto" style="max-width: 600px;">The parameters provided (specifically water availability) carry a high failure risk for traditional crops in this soil type. We recommend adjusting parameters or exploring alternative drought-resistant cultivation.</p>
+                    <a href="crop_recommendation.php" class="btn btn-outline-custom mt-3">Adjust Parameters</a>
                 </div>
             <?php endif; ?>
 
@@ -418,11 +399,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include "footer.php" ?>
 
-    <script src="assets/js/theme.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Scroll Reveal
+        // Scroll Reveal Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
@@ -430,7 +410,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Hackathon "AI Cyber" Loading Animation
+        // Loading Terminal Animation
         function runAIEngine(e) {
             const btn = document.getElementById('submitBtn');
             const term = document.getElementById('terminalText');
@@ -440,12 +420,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             btn.classList.add('loading');
             
             const phrases = [
-    "> Checking local weather status...",
-    "> Reading soil condition data...",
-    "> Analyzing water requirements...",
-    "> Fetching latest market prices...",
-    "> Calculating harvest potential..."
-];
+                "> Checking local weather status...",
+                "> Reading soil condition data...",
+                "> Analyzing water requirements...",
+                "> Fetching latest market prices...",
+                "> Calculating harvest potential..."
+            ];
+            
             let i = 0;
             term.innerHTML = phrases[0];
             const interval = setInterval(() => {

@@ -1344,3 +1344,130 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <script src="assets/js/theme.js?v=3.0"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+<div id="globalPageLoader" class="global-loader-overlay">
+    <div class="loader-content">
+        <div class="g-loader-pulse">
+            <i class="fa-solid fa-leaf"></i>
+        </div>
+        <h3 class="g-loader-text" id="gLoaderTitle">Loading...</h3>
+        <p class="g-loader-subtext" id="gLoaderSub">Please wait</p>
+    </div>
+</div>
+
+<style>
+    /* Loader CSS - Matches your Dark Premium Theme */
+    .global-loader-overlay {
+        position: fixed;
+        inset: 0;
+        background: #0B1120; /* Deep dark background matching your app */
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .global-loader-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .loader-content {
+        text-align: center;
+        transform: scale(0.9);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .global-loader-overlay.active .loader-content {
+        transform: scale(1);
+    }
+
+    .g-loader-pulse {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        color: #ffffff;
+        margin: 0 auto 25px auto;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+        animation: gLoaderPulse 1.5s infinite;
+    }
+
+    @keyframes gLoaderPulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+        70% { box-shadow: 0 0 0 25px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .g-loader-text {
+        color: #f8fafc;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+    }
+
+    .g-loader-subtext {
+        color: #94a3b8;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin: 0;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loader = document.getElementById('globalPageLoader');
+        const titleEl = document.getElementById('gLoaderTitle');
+        const subEl = document.getElementById('gLoaderSub');
+
+        // Dynamic Loading Texts for each tab
+        const loadingMessages = {
+            'Dashboard': { title: 'Syncing Workspace...', sub: 'Preparing your farm data' },
+            'Market Prices': { title: 'Accessing Live Markets...', sub: 'Fetching latest mandi rates' },
+            'Weather & Advisory': { title: 'Calibrating Radars...', sub: 'Fetching hyper-local atmospheric data' },
+            'Crop Inventory': { title: 'Opening Inventory...', sub: 'Organizing your crop records' },
+            'default': { title: 'Loading...', sub: 'Please wait a moment' }
+        };
+
+        // Select all navigation links in your navbar
+        const navLinks = document.querySelectorAll('.nav-link, .btn-outline-custom, .btn-action');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetUrl = this.getAttribute('href');
+                const linkText = this.innerText.trim();
+
+                // Only trigger if it's a real page link (not # or javascript:)
+                if (targetUrl && !targetUrl.startsWith('#') && !targetUrl.startsWith('javascript')) {
+                    e.preventDefault(); // Stop instant navigation
+                    
+                    // Set dynamic text based on which tab was clicked
+                    let msg = loadingMessages[linkText] || loadingMessages['default'];
+                    titleEl.innerText = msg.title;
+                    subEl.innerText = msg.sub;
+
+                    // Show Loader
+                    loader.classList.add('active');
+
+                    // Wait 600ms for the animation to look cool, then navigate
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 600);
+                }
+            });
+        });
+    });
+</script>

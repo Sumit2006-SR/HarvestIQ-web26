@@ -272,11 +272,11 @@ $alerts_json = json_encode($active_alerts);
   <?php include 'nav.php' ?>
 
   <!-- LOADER -->
-  <div class="loader-overlay" id="loader">
+  <!-- <div class="loader-overlay" id="loader">
     <div class="pulse-logo"><i class="fa-solid fa-leaf"></i></div>
     <h4 class="mt-4 fw-bold text-success">Calibrating Radars…</h4>
     <p class="text-muted mt-1 fw-medium">Fetching hyper-local atmospheric data</p>
-  </div>
+  </div> -->
 
   <!-- 🚨 STATIC ALERTS CONTAINER (Always right below Nav) 🚨 -->
   <div id="dynamicAlertsContainer" class="container-xl" style="display: none;">
@@ -542,29 +542,36 @@ $alerts_json = json_encode($active_alerts);
         }
     }
 
-    function fetchWeatherByCoords(lat, lon) { processWeather(`api/weather_api.php?lat=${lat}&lon=${lon}`); }
-    function fetchWeather(city) { processWeather(`api/weather_api.php?city=${encodeURIComponent(city)}`); }
+    // === 1. API Fetching Logic with Silent Mode ===
+    function fetchWeatherByCoords(lat, lon, isSilent = false) { 
+        processWeather(`api/weather_api.php?lat=${lat}&lon=${lon}`, isSilent); 
+    }
+    
+    function fetchWeather(city, isSilent = false) { 
+        processWeather(`api/weather_api.php?city=${encodeURIComponent(city)}`, isSilent); 
+    }
 
-    async function processWeather(url) {
-      showLoader();
+    async function processWeather(url, isSilent = false) {
+      if (!isSilent) showLoader(); // সাইলেন্ট না হলে গ্লোবাল লোডার দেখাবে
       try {
         const res = await fetch(url, { cache: 'no-store' });
         const data = await res.json();
         if (data.status === 'success') {
           applyWeatherData(data);
         } else {
-            alert('Location not found. Please try another name.');
+          if (!isSilent) alert('Location not found. Please try another name.');
         }
       } catch (err) {
         console.error(err);
       } finally {
-        hideLoader();
+        if (!isSilent) hideLoader();
       }
     }
 
+    // === 2. Applying Data to HTML ===
     function applyWeatherData(d) {
       document.getElementById('mainWrapper').style.display = 'block';
-      initMap(d.lat, d.lon);
+      initMap(d.latitude || d.lat, d.longitude || d.lon); // ম্যাপ আপডেট
 
       document.getElementById('locationName').textContent = d.location;
       document.getElementById('tempValue').textContent = d.temperature;
@@ -576,50 +583,65 @@ $alerts_json = json_encode($active_alerts);
       document.getElementById('advisoryText').textContent = d.crop_advisory;
       document.getElementById('feelsLike').textContent = d.feels_like;
       document.getElementById('windDir').textContent = d.wind_direction;
-      document.getElementById('rainValue').textContent = d.rain_1h ?? 0;
+      document.getElementById('rainValue').textContent = d.rain_1h || 0;
       document.getElementById('cloudsValue').textContent = d.clouds;
       document.getElementById('sunriseVal').textContent = d.sunrise;
       document.getElementById('sunsetVal').textContent = d.sunset;
       document.getElementById('lastUpdated').textContent = '⟳ Last Sync: ' + new Date().toLocaleTimeString();
 
+      // Suitability Score Calculation
+      const score = d.suitability_score || (100 - (d.risk_level === 'Critical' ? 60 : d.risk_level === 'High' ? 40 : d.risk_level === 'Medium' ? 20 : 5));
       const orb = document.getElementById('scoreCircle');
-      orb.textContent = d.suitability_score + '%';
-      orb.className = 'score-orb mx-auto ' + (d.suitability_score >= 75 ? 'bg-success' : d.suitability_score >= 45 ? 'bg-warning text-dark' : 'bg-danger');
+      orb.textContent = score + '%';
+      orb.className = 'score-orb mx-auto ' + (score >= 75 ? 'bg-success' : score >= 45 ? 'bg-warning text-dark' : 'bg-danger');
 
-      // Always render all active alerts from admin
-      renderAllAlerts();
+      // Admin Alerts
+      if (typeof renderAllAlerts === 'function') renderAllAlerts();
       
       updateVisuals(d);
       
-      // Update custom input field with the resolved location name
       document.getElementById('customLocationInput').value = d.location;
     }
 
+    // === 3. Dynamic Visuals (Icons & Colors) ===
     function updateVisuals(d) {
-      const cond = d.main_condition.toLowerCase();
+      // API থেকে আসা সঠিক কি-ওয়ার্ড (Key) ব্যবহার করা হলো
+      const cond = (d.weather_main || d.weather_condition || '').toLowerCase();
       const icon = document.getElementById('weatherIcon');
       const wrap = document.getElementById('iconWrap');
 
       icon.className = 'fa-solid ';
-      if (cond.includes('thunderstorm')) { icon.classList.add('fa-cloud-bolt', 'text-dark'); wrap.className='bg-dark bg-opacity-10'; } 
-      else if (cond.includes('rain')) { icon.classList.add('fa-cloud-showers-heavy', 'text-primary'); wrap.className='bg-primary bg-opacity-10'; } 
-      else if (cond.includes('clear')) { icon.classList.add('fa-sun', 'text-warning'); wrap.className='bg-warning bg-opacity-10'; } 
-      else if (cond.includes('cloud')) { icon.classList.add('fa-cloud', 'text-secondary'); wrap.className='bg-secondary bg-opacity-10'; } 
-      else { icon.classList.add('fa-cloud-sun', 'text-warning'); wrap.className='bg-warning bg-opacity-10'; }
+      if (cond.includes('thunder') || cond.includes('storm')) { 
+          icon.classList.add('fa-cloud-bolt', 'text-dark'); wrap.className='bg-dark bg-opacity-10 mx-auto mx-sm-0 mb-3'; 
+      } 
+      else if (cond.includes('rain') || cond.includes('drizzle')) { 
+          icon.classList.add('fa-cloud-showers-heavy', 'text-primary'); wrap.className='bg-primary bg-opacity-10 mx-auto mx-sm-0 mb-3'; 
+      } 
+      else if (cond.includes('clear')) { 
+          icon.classList.add('fa-sun', 'text-warning'); wrap.className='bg-warning bg-opacity-10 mx-auto mx-sm-0 mb-3'; 
+      } 
+      else if (cond.includes('cloud')) { 
+          icon.classList.add('fa-cloud', 'text-secondary'); wrap.className='bg-secondary bg-opacity-10 mx-auto mx-sm-0 mb-3'; 
+      } 
+      else { 
+          icon.classList.add('fa-cloud-sun', 'text-warning'); wrap.className='bg-warning bg-opacity-10 mx-auto mx-sm-0 mb-3'; 
+      }
 
+      // Risk Level অনুযায়ী কালার চেঞ্জ
       const box = document.getElementById('advisoryBox');
       const aIcon = document.getElementById('advisoryIcon');
       const aBg = document.getElementById('advisoryIconBg');
       const badge = document.getElementById('riskBadge');
 
-      badge.textContent = 'Risk: ' + d.risk_level;
+      const risk = d.risk_level || 'Low';
+      badge.textContent = 'Risk: ' + risk;
 
-      if (d.action_type === 'success') {
+      if (risk === 'Low') {
         box.style.borderLeftColor = '#10b981';
         aIcon.className = 'fa-solid fa-microchip fs-3 text-success';
         aBg.className = 'bg-success bg-opacity-10 p-3 rounded-circle';
         badge.className = 'badge bg-success px-4 py-2 rounded-pill fs-6 text-white border-0';
-      } else if (d.action_type === 'warning') {
+      } else if (risk === 'Medium') {
         box.style.borderLeftColor = '#f59e0b';
         aIcon.className = 'fa-solid fa-triangle-exclamation fs-3 text-warning';
         aBg.className = 'bg-warning bg-opacity-10 p-3 rounded-circle';
@@ -632,13 +654,26 @@ $alerts_json = json_encode($active_alerts);
       }
     }
 
-    function showLoader() { document.getElementById('loader').style.display = 'flex'; document.getElementById('loader').style.opacity = '1'; }
-    function hideLoader() { setTimeout(() => { document.getElementById('loader').style.opacity = '0'; setTimeout(() => document.getElementById('loader').style.display = 'none', 500); }, 250); }
+    // === 4. Integrating Global nav.php Loader ===
+    function showLoader() { 
+        const gLoader = document.getElementById('globalPageLoader');
+        if(gLoader) {
+            document.getElementById('gLoaderTitle').innerText = 'Calibrating Radars...';
+            document.getElementById('gLoaderSub').innerText = 'Fetching live atmospheric data';
+            gLoader.classList.add('active');
+        }
+    }
 
-    // On Load
-    window.onload = () => {
-        fetchWeather('Kolkata'); // Loads default location on start
-    };
+    function hideLoader() { 
+        const gLoader = document.getElementById('globalPageLoader');
+        if(gLoader) gLoader.classList.remove('active');
+    }
+
+    // === 5. Auto Load (Silent) ===
+    window.addEventListener('load', () => {
+        // 'true' পাঠানোর মানে হলো পেজ লোড হওয়ার সময় কোনো ডাবল-লোডার দেখাবে না
+        fetchWeather('Kolkata', true); 
+    });
   </script>
 </body>
 </html>
