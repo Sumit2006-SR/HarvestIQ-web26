@@ -244,27 +244,57 @@ require_once 'db.php';
             </div>
         </div>
     </section>
-
-    <section class="mission-section" id="mission">
-        <div class="container">
-            <div class="section-title reveal">
-                <h2>Driven By Purpose</h2>
-                <p>Technology rooted in the soil — built for the people who feed the nation.</p>
-            </div>
-            <div class="mission-grid">
-                <div class="glass-card reveal">
-                    <div class="card-icon" style="color: var(--hiq-amber, #f59e0b); background: rgba(245, 158, 11, 0.12);"><i class="fa-solid fa-bullseye"></i></div>
-                    <h3>Our Mission</h3>
-                    <p>To bridge the digital gap in agriculture by providing farmers with transparent, real-time, and actionable data.</p>
-                </div>
-                <div class="glass-card reveal" style="transition-delay: 0.2s;">
-                    <div class="card-icon"><i class="fa-solid fa-earth-asia"></i></div>
-                    <h3>Our Vision</h3>
-                    <p>A future where every farmer, regardless of their farm size, maximizes their yield and achieves financial freedom.</p>
-                </div>
-            </div>
+<!-- ==========================================
+     PREMIUM PURPOSE & IMPACT SECTION
+=========================================== -->
+<section class="purpose-section" id="mission">
+    <div class="container">
+        <div class="section-title reveal">
+            <h2>Driven By <span class="text-gradient-amber">Purpose</span></h2>
+            <p>Technology rooted in the soil — built for the people who feed the nation.</p>
         </div>
-    </section>
+        
+        <div class="purpose-bento">
+            
+            <!-- Card 1: Mission (Amber Theme) -->
+            <div class="purpose-card reveal">
+                <div class="card-glow amber-glow"></div>
+                <div class="card-icon" style="color: #fbbf24;"><i class="fa-solid fa-bullseye"></i></div>
+                <h3>Our Mission</h3>
+                <p>To completely eradicate the digital gap in agriculture by providing farmers with transparent, real-time, and actionable advisory data directly to their smartphones.</p>
+                <ul class="purpose-list">
+                    <li><i class="fa-solid fa-bolt text-warning"></i> Real-time API Sync</li>
+                    <li><i class="fa-solid fa-language text-warning"></i> Zero Technical Barriers</li>
+                </ul>
+            </div>
+
+            <!-- Card 2: Vision (Emerald Theme) -->
+            <div class="purpose-card reveal" style="transition-delay: 0.2s;">
+                <div class="card-glow emerald-glow"></div>
+                <div class="card-icon" style="color: #34d399;"><i class="fa-solid fa-earth-asia"></i></div>
+                <h3>Our Vision</h3>
+                <p>A future where every farmer, regardless of their farm size or education, maximizes their yield and achieves absolute financial freedom.</p>
+                <div class="floating-stat">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-text">Farmer<br>Empowerment</span>
+                </div>
+            </div>
+
+            <!-- Card 3: The Impact (Blue/Cyan Theme) -->
+            <div class="purpose-card reveal" style="transition-delay: 0.4s;">
+                <div class="card-glow blue-glow"></div>
+                <div class="card-icon" style="color: #60a5fa;"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <h3>The Impact</h3>
+                <p>We bypass traditional supply chain bottlenecks, ensuring farmers get the exact Mandi rate they deserve while safeguarding crops from weather anomalies.</p>
+                <div class="impact-tags">
+                    <span class="i-tag"><i class="fa-solid fa-ban text-danger"></i> No Middlemen</span>
+                    <span class="i-tag"><i class="fa-solid fa-arrow-trend-up text-success"></i> Maximum ROI</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
     <section class="cta-section reveal" id="contact">
         <h2>Ready to Transform Your Farm?</h2>

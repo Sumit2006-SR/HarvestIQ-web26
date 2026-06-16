@@ -1149,3 +1149,90 @@ section { padding: 5.5rem 0; }
 
 
  
+
+
+
+/* ==========================================
+   PREMIUM MISSION & IMPACT SECTION (HACKATHON EXCLUSIVE)
+=========================================== */
+.purpose-section { 
+    padding: 120px 20px; 
+    position: relative; 
+    overflow: hidden; 
+    background: radial-gradient(circle at center, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+}
+
+.text-gradient-amber { 
+    background: linear-gradient(135deg, #f59e0b, #fbbf24); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+}
+
+.purpose-bento { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
+    position: relative; 
+    z-index: 2; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+}
+
+.purpose-card { 
+    background: rgba(15, 23, 42, 0.6); 
+    backdrop-filter: blur(24px); 
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    border-radius: 32px; 
+    padding: 40px; 
+    position: relative; 
+    overflow: hidden; 
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start;
+}
+
+.purpose-card:hover { 
+    transform: translateY(-12px); 
+    border-color: rgba(255, 255, 255, 0.25); 
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Card Inner Glow Effects */
+.card-glow { 
+    position: absolute; 
+    width: 200px; 
+    height: 200px; 
+    filter: blur(70px); 
+    top: -50px; 
+    right: -50px; 
+    opacity: 0.2; 
+    transition: 0.6s ease; 
+    z-index: 0;
+}
+.purpose-card:hover .card-glow { opacity: 0.5; transform: scale(1.2); }
+.amber-glow { background: #f59e0b; }
+.emerald-glow { background: #10b981; }
+.blue-glow { background: #3b82f6; }
+
+/* Content Styling */
+.purpose-card .card-icon { font-size: 2.8rem; margin-bottom: 25px; color: #fff; z-index: 2; position: relative; }
+.purpose-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800; color: #f8fafc; margin-bottom: 15px; z-index: 2; position: relative;}
+.purpose-card p { color: #94a3b8; font-size: 1.05rem; line-height: 1.6; margin-bottom: 30px; z-index: 2; position: relative; flex-grow: 1;}
+
+/* Unique Features inside Cards */
+.purpose-list { list-style: none; padding: 0; margin: 0; z-index: 2; position: relative;}
+.purpose-list li { color: #cbd5e1; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);}
+
+.floating-stat { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 15px; z-index: 2; position: relative;}
+.floating-stat .stat-num { font-size: 2.5rem; font-weight: 900; color: #10b981; font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1;}
+.floating-stat .stat-text { color: #f8fafc; font-size: 0.9rem; font-weight: 700; line-height: 1.3; text-transform: uppercase; letter-spacing: 1px;}
+
+.impact-tags { display: flex; gap: 12px; flex-wrap: wrap; z-index: 2; position: relative;}
+.i-tag { background: rgba(59, 130, 246, 0.1); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.25); padding: 10px 18px; border-radius: 50px; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 8px;}
+
+@media(max-width: 992px) {
+    .purpose-bento { grid-template-columns: 1fr; }
+    .purpose-card { min-height: auto; }
+}
