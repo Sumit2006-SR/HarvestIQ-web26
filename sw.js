@@ -1,31 +1,18 @@
-const CACHE_NAME = 'harvestiq-offline-v1';
-const urlsToCache = [
-    './',
-    './index.php',
-    './dashboard.php',
-    './market_prices.php',
-    './weather.php',
-    './style.css',
-    './assets/css/bootstrap.min.css',
-    './assets/css/all.min.css',
-    './assets/js/theme.js',
-    './assets/logo-192.png',
-    './assets/logo-512.png'
-];
+const CACHE_NAME = 'harvestiq-premium-v1'; // নতুন নাম, যাতে পুরনো ক্যাশ ডিলিট হয়ে যায়
 
+// ১. Install Event - সাথে সাথে নতুন Service Worker চালু করা
 self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-    );
     self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+ self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) return caches.delete(cacheName);
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
                 })
             );
         })
@@ -33,20 +20,26 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
+// ৩. Fetch Event - "Network First, Dynamic Cache Fallback" (The Hackathon Trick)
 self.addEventListener('fetch', event => {
-     if (!(event.request.url.indexOf('http') === 0)) return;
+    // শুধুমাত্র GET রিকোয়েস্ট ক্যাশ করবে
+    if (event.request.method !== 'GET') return;
+    // ক্রোম এক্সটেনশনের রিকোয়েস্ট ইগনোর করবে
+    if (!event.request.url.startsWith('http')) return;
 
     event.respondWith(
-        caches.match(event.request).then(response => {
-             if (response) return response;
-
-             return fetch(event.request).catch(() => {
-                 console.log("Offline mode detected for:", event.request.url);
-                return new Response('You are offline. Please check your connection.', {
-                    status: 200,
-                    headers: { 'Content-Type': 'text/plain' }
+        fetch(event.request)
+            .then(response => {
+                // অনলাইনে থাকলে রিয়েল ডেটা আনবে এবং সাথে সাথে সেটা ক্যাশ মেমোরিতে সেভ করে রাখবে
+                const clonedResponse = response.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                    cache.put(event.request, clonedResponse);
                 });
-            });
-        })
+                return response;
+            })
+            .catch(() => {
+                // অফলাইনে থাকলে ক্যাশ থেকে ডেটা দেখাবে (ignoreSearch: true থাকায় ?v=5.0 এর মতো ভার্সন থাকলেও এরর খাবে না)
+                return caches.match(event.request, { ignoreSearch: true });
+            })
     );
 });
