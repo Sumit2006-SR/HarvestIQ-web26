@@ -803,24 +803,64 @@ font {
     border: none !important;
 }
 
+/* ---- Translate Popup Styling ---- */
 .sz-swal-popup.swal2-popup {
     max-width: 90vw !important;
     width: 420px !important;
-    padding: 25px 20px !important;
+    padding: 30px 25px !important;
     border-radius: 24px !important;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 .sz-swal-popup .swal2-select {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
-    margin: 20px 0 !important;
-    padding: 12px 15px !important;
+    margin: 25px 0 15px !important;
+    padding: 14px 18px !important;
+    border-radius: 12px !important;
+    border: 1.5px solid #E2E8F0 !important;
+    background: #F8FAFC !important;
+    color: #0F172A !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
     appearance: auto !important;
     -webkit-appearance: auto !important;
-    font-size: 1rem !important;
 }
 
+.sz-swal-popup .swal2-select:focus {
+    outline: none !important;
+    border-color: #16a34a !important;
+}
+
+/* Bulletproof Button Styling */
+.hiq-pill-btn {
+    border-radius: 50px !important;
+    padding: 12px 28px !important;
+    font-weight: 700 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease !important;
+}
+.hiq-pill-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .sz-swal-popup.swal2-popup {
+    background: #0f172a !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+}
+[data-theme="dark"] .sz-swal-popup .swal2-title,
+[data-theme="dark"] .sz-swal-popup .swal2-html-container {
+    color: #f8fafc !important;
+}
+[data-theme="dark"] .sz-swal-popup .swal2-select {
+    background: #1e293b !important;
+    border-color: rgba(255,255,255,0.2) !important;
+    color: #f8fafc !important;
+}
 
 .weather-main-container {
     padding-top: 100px;  
