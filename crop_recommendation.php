@@ -266,12 +266,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php include "nav.php" ?>
 
-    <div class="engine-header reveal active">
-        <div class="container">
-            <h1 class="engine-title">AI Crop <span>Intelligence</span></h1>
-            <p class="lead text-muted mx-auto" style="max-width: 650px;">Input your farm's telemetry. Our Machine Learning engine will analyze risks, water sustainability, and calculate absolute peak profitability.</p>
-        </div>
+   <div class="engine-header reveal active">
+    <div class="container">
+        <h1 class="engine-title">Crop <span>Advisor</span></h1>
+        <p class="lead text-muted mx-auto" style="max-width: 650px;">
+            Tell us about your soil and season. We will help you choose the right crop to get a better harvest and profit.
+        </p>
     </div>
+</div>
 
     <div class="container pb-5">
         <?php if (!$is_submitted): ?>
@@ -281,41 +283,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="glass-panel">
                         <form method="POST" id="aiForm" onsubmit="runAIEngine(event)">
                             <div class="row g-4 mb-5">
-                                <div class="col-md-6">
-                                    <label class="form-label"><i class="fas fa-layer-group"></i> Soil Matrix Composition</label>
-                                    <select class="form-select" name="soil_type" required>
-                                        <option value="" disabled selected>Select primary soil type...</option>
-                                        <option value="Loamy">Loamy (High Nutrient/Balance)</option>
-                                        <option value="Clay">Clay (High Water Retention)</option>
-                                        <option value="Sandy">Sandy (Rapid Drainage)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label"><i class="fas fa-cloud-sun"></i> Seasonal Cycle</label>
-                                    <select class="form-select" name="season" required>
-                                        <option value="" disabled selected>Determine atmospheric window...</option>
-                                        <option value="Rabi">Rabi (Winter / Dry Phase)</option>
-                                        <option value="Kharif">Kharif (Monsoon / Wet Phase)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label"><i class="fas fa-tint"></i> Water Availability Index</label>
-                                    <select class="form-select" name="water" required>
-                                        <option value="" disabled selected>Assess irrigation capacity...</option>
-                                        <option value="Low">Low (Strictly Rainfed)</option>
-                                        <option value="Medium">Medium (Supplemental Irrigation)</option>
-                                        <option value="High">High (Abundant Access)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label"><i class="fas fa-vector-square"></i> Cultivation Area (Acres)</label>
-                                    <input type="number" step="0.1" min="0.1" class="form-control" name="land_size" placeholder="Enter farm size (e.g. 2.5)" required>
-                                </div>
+                              <div class="col-md-6">
+    <label class="form-label"><i class="fas fa-seedling"></i> What is your soil type?</label>
+    <select class="form-select" name="soil_type" required>
+        <option value="" disabled selected>Choose your soil...</option>
+        <option value="Loamy">Loamy (Fertile & Balanced)</option>
+        <option value="Clay">Clay (Holds water well)</option>
+        <option value="Sandy">Sandy (Drains water quickly)</option>
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label class="form-label"><i class="fas fa-cloud-sun"></i> Current Season</label>
+    <select class="form-select" name="season" required>
+        <option value="" disabled selected>Select season...</option>
+        <option value="Rabi">Rabi (Winter Season)</option>
+        <option value="Kharif">Kharif (Monsoon Season)</option>
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label class="form-label"><i class="fas fa-tint"></i> Water Access</label>
+    <select class="form-select" name="water" required>
+        <option value="" disabled selected>How is your water access?</option>
+        <option value="Low">Low (Depends on rain)</option>
+        <option value="Medium">Medium (Need support for water)</option>
+        <option value="High">High (Plenty of water)</option>
+    </select>
+</div>
+
+<div class="col-md-6">
+    <label class="form-label"><i class="fas fa-tractor"></i> Farm Size (Acres)</label>
+    <input type="number" step="0.1" min="0.1" class="form-control" name="land_size" placeholder="e.g. 2.5" required>
+</div>
                             </div>
-                            <button type="submit" class="btn-run-ai" id="submitBtn">
-                                <span class="btn-content"><i class="fas fa-microchip me-2"></i> Run Deep Analysis</span>
-                                <div class="ai-terminal" id="terminalText">Initializing AI models...</div>
-                            </button>
+                           <button type="submit" class="btn-run-ai" id="submitBtn">
+    <span class="btn-content"><i class="fas fa-search me-2"></i> Find Best Crop</span>
+    <div class="ai-terminal" id="terminalText">Checking soil data...</div>
+</button>
                         </form>
                     </div>
                 </div>
@@ -328,7 +333,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <h2 class="fw-bold mb-2 text-main">Analysis Complete</h2>
                     <p class="text-muted m-0"><i class="fas fa-check-circle text-success me-2"></i> Derived top recommendations for <?php echo htmlspecialchars($user_land_size); ?> acres of <?php echo htmlspecialchars($user_soil); ?> soil.</p>
                 </div>
-                <a href="crop_recommendation.php" class="btn-outline-custom"><i class="fas fa-redo me-2"></i> Recalibrate</a>
+<a href="crop_recommendation.php" class="btn-outline-custom"><i class="fas fa-redo me-2"></i> New Search</a>
             </div>
 
             <?php if (count($recommendations) > 0): ?>
@@ -348,7 +353,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                     <path class="circle" stroke="<?php echo $circle_color; ?>" stroke-dasharray="<?php echo $dash_val; ?>" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                     <text x="18" y="19" class="percentage"><?php echo $crop['match_score']; ?>%</text>
-                                    <text x="18" y="25" class="score-lbl">AI MATCH</text>
+<text x="18" y="25" class="score-lbl">BEST FIT</text>
                                 </svg>
                             </div>
 
@@ -372,27 +377,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
 
                                 <div class="insight-box">
-                                    <h6><i class="fas fa-robot text-success me-2"></i> Agronomic Advisory</h6>
-                                    <p><?php echo htmlspecialchars($crop['reason']); ?></p>
-                                </div>
+    <h6><i class="fas fa-leaf text-success me-2"></i> Why this crop?</h6>
+    <p><?php echo htmlspecialchars($crop['reason']); ?></p>
+</div>
 
-                                <div class="metrics-grid">
-                                    <div class="metric-box">
-                                        <div class="m-lbl">Est. Capital Required</div>
-                                        <div class="m-val text-danger">₹<?php echo number_format($crop['total_cost']); ?></div>
-                                    </div>
-                                    <div class="metric-box">
-                                        <div class="m-lbl">Projected Revenue</div>
-                                        <div class="m-val text-info">₹<?php echo number_format($crop['total_revenue']); ?></div>
-                                    </div>
-                                    <div class="metric-box">
-                                        <div class="m-lbl">Volume Yield</div>
-                                        <div class="m-val"><?php echo number_format($crop['calculated_yield']); ?> <span class="fs-6 text-muted fw-normal">kg</span></div>
-                                    </div>
-                                    <div class="metric-box" style="background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3);">
-                                        <div class="m-lbl text-success">Net Profit Yield</div>
-                                        <div class="m-val m-profit">₹<?php echo number_format($crop['net_profit']); ?></div>
-                                    </div>
+<div class="metrics-grid">
+    <div class="metric-box">
+        <div class="m-lbl">Estimated Cost</div>
+        <div class="m-val text-danger">₹<?php echo number_format($crop['total_cost']); ?></div>
+    </div>
+    <div class="metric-box">
+        <div class="m-lbl">Expected Sales</div>
+        <div class="m-val text-info">₹<?php echo number_format($crop['total_revenue']); ?></div>
+    </div>
+    <div class="metric-box">
+        <div class="m-lbl">Expected Yield</div>
+        <div class="m-val"><?php echo number_format($crop['calculated_yield']); ?> <span class="fs-6 text-muted fw-normal">kg</span></div>
+    </div>
+    <div class="metric-box" style="background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3);">
+        <div class="m-lbl text-success">Your Profit</div>
+        <div class="m-val m-profit">₹<?php echo number_format($crop['net_profit']); ?></div>
+    </div>
+</div>
                                 </div>
                             </div>
                         </div>
@@ -434,13 +440,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             btn.classList.add('loading');
             
             const phrases = [
-                "> Scanning local weather patterns...",
-                "> Analyzing soil matrix anomalies...",
-                "> Evaluating water sustainability indexes...",
-                "> Fetching live market APIs...",
-                "> Compiling profit predictions..."
-            ];
-            
+    "> Checking local weather status...",
+    "> Reading soil condition data...",
+    "> Analyzing water requirements...",
+    "> Fetching latest market prices...",
+    "> Calculating harvest potential..."
+];
             let i = 0;
             term.innerHTML = phrases[0];
             const interval = setInterval(() => {

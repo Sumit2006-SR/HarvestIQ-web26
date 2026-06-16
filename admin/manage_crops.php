@@ -466,16 +466,17 @@ $crops_result = $conn->query("SELECT * FROM crop_knowledge ORDER BY id DESC");
               <label class="f-label">Market Price/kg (₹)</label>
               <input type="number" step="0.01" class="f-input fw-bold text-success" name="price_per_kg" placeholder="e.g. 25.50" required>
             </div>
-            <div class="col-lg-12">
-              <label class="f-label">AI Agronomic Reason</label>
-              <input type="text" class="f-input" name="reason" placeholder="Explain why the AI should recommend this crop..." required>
-            </div>
+           <div class="col-lg-12">
+    <label class="f-label">Why is this crop recommended? (Expert Advice)</label>
+    <textarea class="f-input" name="reason" rows="3" placeholder="Example: Best for monsoon season as it requires less water and grows well in sandy soil..." required></textarea>
+    <small class="text-muted" style="color: #64748b; font-size: 0.8rem;">* This advice will be shown to farmers when they check crop recommendations.</small>
+</div>
           </div>
           <div class="mt-4 d-flex justify-content-end">
-            <button type="submit" name="add_crop" class="btn-action">
-              <i class="fa-solid fa-cloud-arrow-up"></i> Sync to AI Engine
-            </button>
-          </div>
+    <button type="submit" name="add_crop" class="btn-action" style="background: #16a34a; color: white;">
+        <i class="fa-solid fa-floppy-disk"></i> Save Farming Rule
+    </button>
+</div>
         </form>
       </div>
     </div>
