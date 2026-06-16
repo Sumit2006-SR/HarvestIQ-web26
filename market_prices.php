@@ -40,23 +40,23 @@ $json_encoded_data = json_encode($market_data_json);
 
 <div class="market-dashboard">
     <div class="dashboard-header">
-        <div class="header-title-box">
-            <h1>Mandi Board</h1>
-            <p>Real-time agricultural pricing fetched directly from verified wholesale markets.</p>
-        </div>
-        <div class="status-box">
-            <div class="network-status" id="netStatus">
-                <div class="pulse-dot"></div> <span id="netText">System Online</span>
-            </div>
-            <div class="live-clock" id="clock">00:00:00</div>
-        </div>
+       <div class="header-title-box">
+    <h1>Live Market Exchange</h1>
+    <p>Real-time agricultural pricing fetched directly from verified wholesale markets.</p>
+</div>
+<div class="status-box">
+    <div class="network-status" id="netStatus">
+        <div class="pulse-dot"></div> <span id="netText">System Online</span>
     </div>
+    <div class="live-clock" id="clock">00:00:00</div>
+</div>
+</div>
 
-    <div class="controls-wrapper">
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Search crops (e.g., Rice, Potato) or Mandi..." onkeyup="filterData()">
-        </div>
+<div class="controls-wrapper">
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+         <input type="text" id="searchInput" placeholder="Search crops (e.g., Rice, Potato) or Market..." onkeyup="filterData()">
+    </div>
         <button class="filter-chip active" onclick="setFilter('all', this)">All Assets</button>
         <button class="filter-chip" onclick="setFilter('up', this)"><i class="fa-solid fa-arrow-trend-up"></i> Profit</button>
         <button class="filter-chip" onclick="setFilter('down', this)"><i class="fa-solid fa-arrow-trend-down"></i> Loss</button>

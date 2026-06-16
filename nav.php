@@ -736,6 +736,48 @@ $current_page = basename($_SERVER['PHP_SELF']);
 .sz-top-nav li {
     list-style-type: none !important; /* এক্সট্রা সেফটির জন্য */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+       THEME TOGGLE BUTTON CSS
+       ========================================= */
+    .desktop-theme-toggle {
+        background: var(--sz-bg-light);
+        border: 1px solid var(--sz-border-soft);
+        color: var(--sz-text-dark);
+        padding: 8px 16px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+    .desktop-theme-toggle:hover {
+        background: var(--sz-border-soft);
+        transform: translateY(-2px);
+    }
+
+    /* Dark Mode Colors */
+    [data-theme="dark"] .desktop-theme-toggle {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #f8fafc;
+    }
+    [data-theme="dark"] .desktop-theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 </style>
 
 <div class="sz-nav-wrapper sz-navbar-scope" id="mainNavbarWrapper">
@@ -781,9 +823,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="sz-divider"></div>
         <div class="d-flex align-items-center" style="gap: 20px; z-index: 5;">
 
-            <button type="button" class="hiq-theme-toggle d-none d-sm-flex" data-hiq-theme-toggle aria-label="Switch theme" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 50px; color: #fff; cursor: pointer;">
-                <i class="fa-solid fa-moon"></i>
-            </button>
+           <button type="button" class="desktop-theme-toggle d-none d-sm-flex" data-hiq-theme-toggle aria-label="Switch theme">
+    <i class="fa-solid fa-moon theme-icon-main"></i>
+</button>
 
             <?php if ($is_logged_in): ?>
                 <!-- Notification Bell -->
@@ -1286,36 +1328,44 @@ $current_page = basename($_SERVER['PHP_SELF']);
         });
     }
 
-    // Theme Toggle
+    // =========================================
+    // ROBUST THEME TOGGLE
+    // =========================================
     document.addEventListener("DOMContentLoaded", function() {
         const themeToggles = document.querySelectorAll('[data-hiq-theme-toggle]');
         const htmlElement = document.documentElement;
 
         function updateToggleIcons(theme) {
-            themeToggles.forEach(btn => {
-                const icon = btn.querySelector('i.fa-solid:not(.icon-sun):not(.icon-moon)'); 
-                if (icon) {
-                    if (theme === 'dark') {
-                        icon.classList.remove('fa-moon');
-                        icon.classList.add('fa-sun');
-                    } else {
-                        icon.classList.remove('fa-sun');
-                        icon.classList.add('fa-moon');
-                    }
+            document.querySelectorAll('.theme-icon-main').forEach(icon => {
+                if (theme === 'dark') {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
                 }
             });
         }
 
+        // Initialize on load
         let currentTheme = localStorage.getItem('harvestiq-theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
         updateToggleIcons(currentTheme);
 
         themeToggles.forEach(btn => {
             btn.addEventListener('click', function(e) {
-                e.preventDefault(); 
-                let theme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                htmlElement.setAttribute('data-theme', theme);
-                localStorage.setItem('harvestiq-theme', theme); 
-                updateToggleIcons(theme);
+                e.preventDefault();
+                e.stopPropagation(); // Stops conflicts with other scripts
+
+                let current = htmlElement.getAttribute('data-theme');
+                let newTheme = current === 'dark' ? 'light' : 'dark';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('harvestiq-theme', newTheme);
+                updateToggleIcons(newTheme);
+
+                // This tells other pages (like Market charts) that the theme changed
+                window.dispatchEvent(new Event('themeChanged'));
             });
         });
     });
@@ -1342,7 +1392,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
 </script>
 
-<script src="assets/js/theme.js?v=3.0"></script>
+<!-- <script src="assets/js/theme.js?v=3.0"></script> -->
 <script src="assets/js/bootstrap.bundle.min.js"></script>
 
 

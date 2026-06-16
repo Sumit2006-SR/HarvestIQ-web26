@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6,
 
 /* ================= HERO ================= */
 .hero {
-    min-height: 100vh;
+    min-height: 10vh;
     display: flex;
     align-items: center;
     text-align: center;

@@ -101,17 +101,17 @@ require_once 'db.php';
             <div class="hero-grid-lines"></div>
         </div>
 
-        <div class="hero-float-cards">
-            <div class="float-card float-card-1"><i class="fa-solid fa-cloud-sun-rain"></i> Live Weather</div>
-            <div class="float-card float-card-2"><i class="fa-solid fa-chart-line"></i>Market Rates</div>
-            <div class="float-card float-card-3"><i class="fa-solid fa-seedling"></i> Crop AI</div>
-        </div>
+      <div class="hero-float-cards">
+    <div class="float-card float-card-1"><i class="fa-solid fa-cloud-sun-rain"></i> Live Weather</div>
+    <div class="float-card float-card-2"><i class="fa-solid fa-chart-line"></i> Market Rates</div>
+    <div class="float-card float-card-3"><i class="fa-solid fa-seedling"></i> Crop Guide</div>
+</div>
 
-        <div class="container hero-content reveal visible">
-            <div class="hero-badge"><i class="fa-solid fa-microchip"></i> AI-Powered Agriculture</div>
-            <h1>Grow More. Guess Less.<br><span class="gradient-text">Cultivate Smarter.</span></h1>
-            <p>Empowering rural farmers with real-time weather intelligence, live market insights, and AI-driven crop recommendations to maximize yield and profit.</p>
-            
+<div class="container hero-content reveal visible">
+    <div class="hero-badge"><i class="fa-solid fa-lightbulb"></i> Smart Agriculture</div>
+    <h1>Grow More. Guess Less.<br><span class="gradient-text">Cultivate Smarter.</span></h1>
+    <p>Empowering rural farmers with real-time weather intelligence, live market insights, and data-driven crop recommendations to maximize yield and profit.</p>
+<!-- </div> -->
             <div class="hero-buttons">
                 <?php if(!isset($_SESSION['user_id'])): ?>
                     <button onclick="openAuthModal('signupModal')" class="btn-premium btn-primary-glow">
@@ -341,5 +341,10 @@ require_once 'db.php';
             });
         }
     </script>
+
+
+
+
+
 </body>
 </html>

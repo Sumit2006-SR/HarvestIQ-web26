@@ -66,7 +66,7 @@
     /* টেক্সটের রঙটা হালকা সবুজ থেকে গ্রে করে দিলাম যাতে গ্লাসের সাথে ভালো মানায় */
     .hiq-pro-footer-scope .newsletter-text p { color: #94a3b8; font-size: 1.05rem; margin: 0; font-weight: 500; }
 
-    
+
     .hiq-pro-footer-scope .newsletter-form { display: flex; gap: 10px; flex: 1; min-width: 320px; max-width: 500px; position: relative; z-index: 2;}
     .hiq-pro-footer-scope .newsletter-form input {
         width: 100%; padding: 18px 30px; border-radius: 50px;
@@ -588,4 +588,202 @@
         tickerTextElement.innerText = tickerMessages[0];
         setInterval(updateTicker, 5000);
     });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .hiq-floating-dock {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px 10px;
+        border-radius: 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        z-index: 9999;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    [data-theme="light"] .hiq-floating-dock {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .dock-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.05);
+        color: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.15rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+    }
+
+    [data-theme="light"] .dock-btn {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+
+    .dock-btn:hover {
+        background: #10b981;
+        color: #fff;
+        transform: scale(1.1) translateX(-5px);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* SOS Emergency Button Special Styling */
+    .dock-btn.sos-btn {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        animation: sosPulse 2s infinite;
+    }
+    
+    .dock-btn.sos-btn:hover {
+        background: #ef4444;
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+        animation: none;
+    }
+
+    @keyframes sosPulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+        50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    }
+
+    /* Scroll to Top Hidden by Default */
+    #scrollTopBtn {
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.5);
+    }
+    #scrollTopBtn.show {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+    }
+
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translate(50px, -50%); }
+        to { opacity: 1; transform: translate(0, -50%); }
+    }
+
+    /* Tooltip / Label on Hover */
+    .dock-btn::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        right: 55px;
+        background: var(--bg-card, #0f172a);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.3s;
+        pointer-events: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .dock-btn:hover::before {
+        opacity: 1;
+        visibility: visible;
+        right: 60px;
+    }
+
+    @media (max-width: 768px) {
+        .hiq-floating-dock { right: 10px; padding: 10px 8px; }
+        .dock-btn { width: 38px; height: 38px; font-size: 1rem; }
+        .dock-btn::before { display: none; /* Hide tooltips on mobile */ }
+    }
+</style>
+
+<div class="hiq-floating-dock">
+    <button class="dock-btn" onclick="shareHarvestIQ()" data-tooltip="Share Platform">
+        <i class="fa-solid fa-share-nodes"></i>
+    </button>
+    
+    <a href="https://wa.me/919876543210?text=Hi%20HarvestIQ,%20I%20need%20assistance%20with%20my%20farm." target="_blank" class="dock-btn" data-tooltip="Live Support">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <a href="tel:18001801551" class="dock-btn sos-btn" data-tooltip="Kisan SOS (1800-180-1551)">
+        <i class="fa-solid fa-phone-volume"></i>
+    </a>
+
+    <button class="dock-btn" id="scrollTopBtn" onclick="scrollToTop()" data-tooltip="Back to Top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+</div>
+
+<script>
+    // 1. Native Web Share API Logic (Looks incredibly professional on presentation)
+    async function shareHarvestIQ() {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'HarvestIQ - Smart Agriculture',
+                    text: 'Join HarvestIQ to get real-time weather alerts and AI crop advisories!',
+                    url: window.location.href
+                });
+            } catch (err) {
+                console.log('Share canceled or failed.', err);
+            }
+        } else {
+            // Fallback for browsers that don't support native share
+            navigator.clipboard.writeText(window.location.href);
+            alert("Platform link copied to clipboard!");
+        }
+    }
+
+    // 2. Scroll to Top Logic
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+    
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+            scrollTopBtn.classList.add("show");
+        } else {
+            scrollTopBtn.classList.remove("show");
+        }
+    });
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
 </script>
