@@ -153,17 +153,47 @@ $crops_result = $conn->query("SELECT * FROM crop_knowledge ORDER BY id DESC");
       gap: 10px;
     }
 
+    /* ── ADMIN BADGE FIX ── */
     .admin-badge {
       background: #f8fafc;
       padding: 8px 16px;
       border-radius: 50px;
       border: 1.5px solid #e2e8f0;
-      display: flex;
-      align-items: center;
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
       gap: 12px;
       transition: all 0.3s ease;
+      white-space: nowrap !important; /* লেখাকে এক লাইনে রাখতে বাধ্য করবে */
+      width: max-content;
     }
     .admin-badge:hover { background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+
+    /* ── BUTTON TEXT FIX ── */
+    .btn-action {
+      background: linear-gradient(135deg, var(--green), var(--green-d));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 24px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 9px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+      white-space: nowrap !important; /* বাটনের লেখা ভেঙে নিচে নামবে না */
+      min-width: max-content;
+    }
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(16, 185, 129, 0.45);
+      color: #fff;
+    }
 
     /* ── ALERTS ── */
     .custom-alert {
@@ -380,9 +410,22 @@ $crops_result = $conn->query("SELECT * FROM crop_knowledge ORDER BY id DESC");
               <input type="text" class="f-input" name="name" placeholder="e.g. Basmati Rice" required>
             </div>
             <div class="col-lg-1 col-md-2 col-4">
-              <label class="f-label">Icon</label>
-              <input type="text" class="f-input text-center fs-4 p-1" name="icon" placeholder="🌾" required>
-            </div>
+    <label class="f-label">Icon</label>
+    <select class="f-input" name="icon" required style="font-family: 'Segoe UI Emoji', sans-serif;">
+        <option value="🌾">🌾 Rice</option>
+        <option value="🌽">🌽 Maize</option>
+        <option value="🥔">🥔 Potato</option>
+        <option value="🍅">🍅 Tomato</option>
+        <option value="🧅">🧅 Onion</option>
+        <option value="🌶️">🌶️ Chilli</option>
+        <option value="🥬">🥬 Spinach</option>
+        <option value="🍆">🍆 Eggplant</option>
+        <option value="🥕">🥕 Carrot</option>
+        <option value="🥦">🥦 Broccoli</option>
+        <option value="🌻">🌻 Sunflower</option>
+        <option value="🥜">🥜 Groundnut</option>
+    </select>
+</div>
             <div class="col-lg-2 col-md-4 col-8">
               <label class="f-label">Soil Req.</label>
               <select class="f-input" name="soil_type" required>
