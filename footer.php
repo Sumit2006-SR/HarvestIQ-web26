@@ -32,16 +32,19 @@
         color: var(--sz-ft-text-muted);
         box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
     }
-
-    /* 🌟 Floating Newsletter Box - Enterprise Look */
+/* 🌟 Floating Newsletter Box - Enterprise Glass Look */
     .hiq-pro-footer-scope .newsletter-box {
-        background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+        /* নতুন Glassmorphism ব্যাকগ্রাউন্ড */
+        background: rgba(15, 23, 42, 0.7); 
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(16, 185, 129, 0.15);
+        
         border-radius: 24px;
         padding: 45px 60px;
         display: flex; align-items: center; justify-content: space-between;
         flex-wrap: wrap; gap: 30px;
-        box-shadow: 0 30px 60px -15px rgba(6, 78, 59, 0.5);
-        border: 1px solid rgba(16, 185, 129, 0.2);
         margin-top: -75px; margin-bottom: 80px;
         position: relative; z-index: 20;
         overflow: hidden;
@@ -49,16 +52,20 @@
     
     .hiq-pro-footer-scope .newsletter-box::before {
         content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-        background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
         pointer-events: none;
     }
 
     .hiq-pro-footer-scope .newsletter-text { flex: 1; min-width: 280px; position: relative; z-index: 2; }
+    
     .hiq-pro-footer-scope .newsletter-text h4 {
         color: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
         margin-bottom: 10px; font-size: 1.8rem; letter-spacing: -0.5px;
     }
-    .hiq-pro-footer-scope .newsletter-text p { color: #a7f3d0; font-size: 1.05rem; margin: 0; font-weight: 400; }
+    
+    /* টেক্সটের রঙটা হালকা সবুজ থেকে গ্রে করে দিলাম যাতে গ্লাসের সাথে ভালো মানায় */
+    .hiq-pro-footer-scope .newsletter-text p { color: #94a3b8; font-size: 1.05rem; margin: 0; font-weight: 500; }
+
     
     .hiq-pro-footer-scope .newsletter-form { display: flex; gap: 10px; flex: 1; min-width: 320px; max-width: 500px; position: relative; z-index: 2;}
     .hiq-pro-footer-scope .newsletter-form input {
