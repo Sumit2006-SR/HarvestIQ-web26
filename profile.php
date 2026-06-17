@@ -169,6 +169,8 @@ $avatar_url = 'https://ui-avatars.com/api/?name=' . urlencode($user_data['full_n
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=3.0">
+    <!-- Favicon for Browser Tab -->
+<link rel="icon" type="image/png" href="assets/logo-192.png">
     <script src="assets/js/theme.js" defer></script>
     <style>
         :root {

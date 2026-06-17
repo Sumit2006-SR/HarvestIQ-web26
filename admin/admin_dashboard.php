@@ -33,7 +33,8 @@ $recent_users = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC LIMIT 
     <title>Admin Overview | HarvestIQ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
-    
+    <!-- Favicon for Admin Pages -->
+<link rel="icon" type="image/png" href="../assets/logo-192.png">
     <style>
         /* ==========================================
            PREMIUM THEME VARIABLES (Dark & Light)

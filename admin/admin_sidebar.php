@@ -4,6 +4,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <script>(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('harvestiq-theme')||'light');}catch(e){}})();</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="admin.css?v=1.0">
+<!-- Favicon for Admin Pages -->
+<link rel="icon" type="image/png" href="../assets/logo-192.png">
 <script src="../assets/js/theme.js" defer></script>
 
 <style>

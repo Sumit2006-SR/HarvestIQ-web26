@@ -15,6 +15,7 @@ $json_encoded_data = json_encode($market_data_json);
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Market Prices | HarvestIQ</title>
@@ -22,6 +23,8 @@ $json_encoded_data = json_encode($market_data_json);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=3.0">
+    <!-- Favicon for Browser Tab -->
+<link rel="icon" type="image/png" href="assets/logo-192.png">
     <script src="assets/js/theme.js" defer></script>
     <style>
         .network-status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--hiq-neon); margin-bottom: 5px; }

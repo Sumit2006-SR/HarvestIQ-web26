@@ -96,7 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=7.0">
-
+<!-- Favicon for Browser Tab -->
+<link rel="icon" type="image/png" href="assets/logo-192.png">
     <style>
         /* =========================================
            ULTRA-PREMIUM DASHBOARD SYNC THEME

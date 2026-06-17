@@ -780,6 +780,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
 </style>
 
+
+<!-- Favicon for Browser Tab -->
+<link rel="icon" type="image/png" href="assets/logo-192.png">
+
 <div class="sz-nav-wrapper sz-navbar-scope" id="mainNavbarWrapper">
     <nav class="sz-nav-inner" id="mainNavbarInner">
         <a href="index.php" class="sz-brand notranslate" style="display: flex; align-items: center; white-space: nowrap; text-decoration: none;">
@@ -1476,43 +1480,50 @@ $current_page = basename($_SERVER['PHP_SELF']);
         margin: 0;
     }
 </style>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const loader = document.getElementById('globalPageLoader');
         const titleEl = document.getElementById('gLoaderTitle');
         const subEl = document.getElementById('gLoaderSub');
 
-        // Dynamic Loading Texts for each tab
+        // ১. এখানে আপনার ওয়েবসাইটের সবকটি ট্যাবের নাম এবং মেসেজ সেট করুন
         const loadingMessages = {
             'Dashboard': { title: 'Syncing Workspace...', sub: 'Preparing your farm data' },
             'Market Prices': { title: 'Accessing Live Markets...', sub: 'Fetching latest mandi rates' },
             'Weather & Advisory': { title: 'Calibrating Radars...', sub: 'Fetching hyper-local atmospheric data' },
             'Crop Inventory': { title: 'Opening Inventory...', sub: 'Organizing your crop records' },
-            'default': { title: 'Loading...', sub: 'Please wait a moment' }
+            'Home': { title: 'Welcome Back...', sub: 'Returning to homepage' },
+            'Features': { title: 'Exploring IQ Tools...', sub: 'Loading platform capabilities' },
+            'My Profile': { title: 'Opening Profile...', sub: 'Accessing your personal records' },
+            'Admin Panel': { title: 'Admin Command Center...', sub: 'Initializing secure protocols' },
+            'Sign out': { title: 'Signing Out...', sub: 'Securing your account session' },
+            'My Dashboard': { title: 'Loading Analytics...', sub: 'Fetching your performance data' },
+            'default': { title: 'Processing...', sub: 'Please wait a moment' }
         };
 
-        // Select all navigation links in your navbar
-        const navLinks = document.querySelectorAll('.nav-link, .btn-outline-custom, .btn-action');
+        // ২. সব ধরণের ক্লিকেবল লিংক সিলেক্ট করা হচ্ছে (ড্রপডাউন এবং নেভবার সব মিলে)
+        const navLinks = document.querySelectorAll('.nav-link, .sz-action-item, .sz-mobile-action-link, .sz-mobile-action-btn, .btn-login, .btn-register');
 
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 const targetUrl = this.getAttribute('href');
-                const linkText = this.innerText.trim();
+                
+                // লিংকের ভেতরের টেক্সট নেওয়া হচ্ছে (বোল্ড বা আইকন বাদ দিয়ে শুধু মেইন টেক্সট)
+                let linkText = this.innerText.trim().split('\n')[0]; 
 
-                // Only trigger if it's a real page link (not # or javascript:)
+                // যদি লিংক থাকে এবং সেটা কোনো আইডি (#) বা জাভাস্ক্রিপ্ট না হয়
                 if (targetUrl && !targetUrl.startsWith('#') && !targetUrl.startsWith('javascript')) {
-                    e.preventDefault(); // Stop instant navigation
+                    e.preventDefault(); 
                     
-                    // Set dynamic text based on which tab was clicked
+                    // মেসেজ ম্যাচিং লজিক
                     let msg = loadingMessages[linkText] || loadingMessages['default'];
                     titleEl.innerText = msg.title;
                     subEl.innerText = msg.sub;
 
-                    // Show Loader
+                    // লোডার দেখানো হচ্ছে
                     loader.classList.add('active');
 
-                    // Wait 600ms for the animation to look cool, then navigate
+                    // ৫০০-৬০০ মিলি-সেকেন্ড পর নেভিগেট হবে
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 600);

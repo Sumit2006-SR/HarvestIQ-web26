@@ -34,7 +34,8 @@ $expected_income = '45,500';
     <link rel="stylesheet" href="assets/css/all.min.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css?v=4.0">
-    
+    <!-- Favicon for Browser Tab -->
+<link rel="icon" type="image/png" href="assets/logo-192.png">
     <!-- Chart.js for Premium Data Visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
