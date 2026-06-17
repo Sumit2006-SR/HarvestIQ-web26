@@ -102,6 +102,10 @@ while($stat = mysqli_fetch_assoc($stats_query)) {
             --modal-bg: rgba(15, 23, 42, 0.95);
         }
 
+.text-muted {
+        color: var(--text-muted) !important;
+    }
+
         body.admin-body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-body);
@@ -243,6 +247,11 @@ while($stat = mysqli_fetch_assoc($stats_query)) {
         
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: none } }
         .animate-in { animation: fadeUp 0.6s ease forwards; }
+    
+    /* --- Fix Bootstrap Text Colors for Dark Theme --- */
+.text-muted {
+    color: var(--text-muted) !important;
+}
     </style>
 </head>
 <body class="admin-body">
