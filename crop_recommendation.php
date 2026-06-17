@@ -246,7 +246,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             padding: 10px 24px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; font-size: 0.9rem;
         }
         .btn-outline-custom:hover { background: var(--hiq-surface-hover); border-color: var(--hiq-accent); }
-    </style>
+   
+   
+   /* =========================================
+           🌟 DARK MODE TEXT VISIBILITY FIX 🌟
+           ========================================= */
+        [data-theme="dark"] .text-muted,
+        [data-theme="dark"] p.text-muted,
+        [data-theme="dark"] .form-label,
+        [data-theme="dark"] .m-lbl,
+        [data-theme="dark"] .guide-text {
+            color: #94a3b8 !important; /* ডার্ক মোডের জন্য সফট লাইট-গ্রে কালার */
+        }
+
+        [data-theme="dark"] .text-main,
+        [data-theme="dark"] h1, 
+        [data-theme="dark"] h2, 
+        [data-theme="dark"] h3,
+        [data-theme="dark"] .engine-title,
+        [data-theme="dark"] .guide-item-header {
+            color: #f8fafc !important; /* মেইন টেক্সটের জন্য একদম পারফেক্ট সাদা */
+        }
+   </style>
 </head>
 
 <body>

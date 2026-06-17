@@ -41,6 +41,10 @@ $alerts_json = json_encode($active_alerts);
       --map-border: rgba(255, 255, 255, 0.9);
       --panel-bg: rgba(255, 255, 255, 0.88);
     }
+    /* Overriding Bootstrap text-muted for Dark/Light Theme consistency */
+.text-muted { 
+    color: var(--text-muted) !important; 
+}
 
     [data-theme="dark"] {
       --bg-grad-1: #020617;
@@ -265,6 +269,28 @@ $alerts_json = json_encode($active_alerts);
     .loader-overlay { position: fixed; inset: 0; background: var(--bg-grad-3); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
     .pulse-logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--green), var(--green-d)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: #fff; animation: pulseAnim 1.6s ease-in-out infinite; }
     @keyframes pulseAnim { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); } 70% { box-shadow: 0 0 0 24px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+  
+  
+  
+  /* =========================================
+       🌟 DARK MODE TEXT VISIBILITY FIX 🌟
+       ========================================= */
+    [data-theme="dark"] .text-muted,
+    [data-theme="dark"] p.text-muted,
+    [data-theme="dark"] small.text-muted,
+    [data-theme="dark"] .metric-lbl,
+    [data-theme="dark"] span[id="lastUpdated"] {
+        color: #94a3b8 !important; /* সফট লাইট-গ্রে কালার (চোখে আরাম দেবে) */
+    }
+
+    [data-theme="dark"] .text-main,
+    [data-theme="dark"] h1, 
+    [data-theme="dark"] h2, 
+    [data-theme="dark"] h5,
+    [data-theme="dark"] .temp-display,
+    [data-theme="dark"] .extra-item .fw-bold {
+        color: #f8fafc !important; /* একদম পারফেক্ট সাদা */
+    }
   </style>
 </head>
 
