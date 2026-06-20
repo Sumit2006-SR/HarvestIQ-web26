@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         unset($_SESSION['live_signup_email']);
         unset($_SESSION['is_email_verified']);
         
-        echo "<script>window.location.href='dashboard.php';</script>";
+        echo "<script>window.location.href='index.php';</script>";
         exit();
     } else {
         echo "<script>alert('Database Error!'); window.location.href='index.php';</script>";

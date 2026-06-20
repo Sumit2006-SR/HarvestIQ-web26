@@ -112,7 +112,42 @@ require_once 'db.php';
     <div class="hero-badge"><i class="fa-solid fa-lightbulb"></i> Smart Agriculture</div>
     <h1>Grow More. Guess Less.<br><span class="gradient-text">Cultivate Smarter.</span></h1>
     <p>Empowering rural farmers with real-time weather intelligence, live market insights, and data-driven crop recommendations to maximize yield and profit.</p>
-<!-- </div> -->
+    
+    <!-- 🟢 INSERTED VOICE SEARCH HERE (ABOVE BUTTONS) -->
+    <div class="aura-command-center mt-4"> 
+        <div class="smart-voice-pill mb-4">
+            <div class="voice-input-wrapper">
+                <i class="fa-solid fa-seedling ms-3" style="color: #10b981;"></i>
+                
+                <?php if(isset($_SESSION['user_id'])): ?>
+                    <input type="text" id="skillSearchInput" 
+                           placeholder="Try saying: 'Potato' or 'Wheat'..." 
+                           class="bg-transparent border-0 shadow-none text-dark w-100 px-3"
+                           autocomplete="off" spellcheck="false">
+                <?php else: ?>
+                    <input type="text" id="skillSearchInput" 
+                           placeholder="Try saying: 'Rice' or 'Kolkata'..." 
+                           class="bg-transparent border-0 shadow-none text-dark w-100 px-3"
+                           autocomplete="off" spellcheck="false" readonly style="cursor: pointer;"
+                           onclick="openAuthModal('loginModal')">
+                <?php endif; ?>
+            </div>
+            
+            <?php if(isset($_SESSION['user_id'])): ?>
+                <button id="voiceCommandBtn" class="voice-btn" title="Click to Speak">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+            <?php else: ?>
+                <button type="button" class="voice-btn" title="Login to Speak" onclick="openAuthModal('loginModal')">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+    <!-- 🟢 END VOICE SEARCH -->
+
+
+
             <div class="hero-buttons">
                 <?php if(!isset($_SESSION['user_id'])): ?>
                     <button onclick="openAuthModal('signupModal')" class="btn-premium btn-primary-glow">
@@ -120,8 +155,8 @@ require_once 'db.php';
                     </button>
                     <a href="#features" class="btn-premium btn-outline-glow">Explore Features</a>
                 <?php else: ?>
-                    <a href="dashboard.php" class="btn-premium btn-primary-glow">
-                        Enter Dashboard <i class="fa-solid fa-table-columns"></i>
+                    <a href="market_prices.php" class="btn-premium btn-primary-glow">
+                        Browse Market <i class="fa-solid fa-table-columns"></i>
                     </a>
                     <a href="market_prices.php" class="btn-premium btn-outline-glow">Live Market</a>
                 <?php endif; ?>
@@ -305,8 +340,8 @@ require_once 'db.php';
                 Start Your Journey Now
             </button>
         <?php else: ?>
-            <a href="dashboard.php" class="btn-premium btn-primary-glow" style="font-size: 1.1rem; padding: 16px 40px;">
-                Go to Workspace
+            <a href="market_prices.php" class="btn-premium btn-primary-glow" style="font-size: 1.1rem; padding: 16px 40px;">
+Browse Market
             </a>
         <?php endif; ?>
     </section>
@@ -345,7 +380,63 @@ require_once 'db.php';
 
 
 
+<script>
+    // Real-time Voice Recognition Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const voiceBtn = document.getElementById('voiceCommandBtn');
+        const searchInput = document.getElementById('skillSearchInput');
 
+        if (voiceBtn && searchInput && !searchInput.readOnly) {
+            // Check browser support
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false; // Stop listening automatically after user stops speaking
+                recognition.interimResults = false;
+                recognition.lang = 'en-IN'; // Optimized for Indian accents
+
+                recognition.onstart = function() {
+                    voiceBtn.classList.add('listening');
+                    searchInput.placeholder = "Listening... Speak a crop name.";
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript.trim();
+                    searchInput.value = transcript;
+                    
+                    // Immediately redirect to market prices with the searched word
+                    window.location.href = 'market_prices.php?search=' + encodeURIComponent(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    console.error("Speech error: ", event.error);
+                    searchInput.placeholder = "Try saying: 'Potato' or 'Wheat'...";
+                    voiceBtn.classList.remove('listening');
+                };
+
+                recognition.onend = function() {
+                    voiceBtn.classList.remove('listening');
+                };
+
+                // Trigger mic on click
+                voiceBtn.addEventListener('click', () => {
+                    recognition.start();
+                });
+
+                // Also allow keyboard 'Enter' to search
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && this.value.trim() !== '') {
+                        window.location.href = 'market_prices.php?search=' + encodeURIComponent(this.value.trim());
+                    }
+                });
+            } else {
+                console.warn("Speech recognition is not supported in this browser.");
+                voiceBtn.style.display = 'none'; // Hide mic if not supported
+            }
+        }
+    });
+</script>
 
 </body>
 </html>

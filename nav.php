@@ -798,7 +798,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <ul class="sz-top-nav d-none d-lg-flex">
                     <?php if (isset($_SESSION['user_id'])): ?>
                         <li class="nav-item">
-                            <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
+                            <a href="index.php" class="nav-link <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
                         </li>
                         <li class="nav-item">
                             <a href="market_prices.php" class="nav-link <?php echo ($current_page == 'market_prices.php') ? 'active' : ''; ?>">Market Prices</a>
@@ -907,10 +907,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <span style="color: var(--sz-text-dark); font-weight: 600;">My Profile</span>
                         </a>
 
-                        <a href="dashboard.php" class="sz-action-item">
+                        <!-- <a href="dashboard.php" class="sz-action-item">
                             <div class="sz-action-icon" style="width: 30px; height: 30px; background: #eff6ff; color: #2563eb;"><i class="fa-solid fa-chart-simple"></i></div>
                             <span style="color: var(--sz-text-dark); font-weight: 600;">My Dashboard</span>
-                        </a>
+                        </a> -->
 
                         <a href="javascript:void(0);" class="sz-action-item" onclick="changeLanguage()">
                             <div class="sz-action-icon" style="width: 30px; height: 30px; background: #f0fdf4; color: #16a34a;"><i class="fa-solid fa-globe"></i></div>
@@ -962,7 +962,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <ul class="sz-mobile-nav-list">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li class="nav-item">
-                    <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
+                    <a href="index.php" class="nav-link <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>">Home</a>
                 </li>
                 <li class="nav-item">
                     <a href="market_prices.php" class="nav-link <?php echo ($current_page == 'market_prices.php') ? 'active' : ''; ?>">Market Prices</a>

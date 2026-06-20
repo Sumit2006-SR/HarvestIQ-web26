@@ -732,13 +732,16 @@
 </style>
 
 <div class="hiq-floating-dock">
+
+<button class="dock-btn" onclick="openZyneAssistant()" data-tooltip="Ask Zyne AI">
+        <i class="fa-solid fa-robot"></i>
+    </button>
+
     <button class="dock-btn" onclick="shareHarvestIQ()" data-tooltip="Share Platform">
         <i class="fa-solid fa-share-nodes"></i>
     </button>
     
-    <a href="https://wa.me/919876543210?text=Hi%20HarvestIQ,%20I%20need%20assistance%20with%20my%20farm." target="_blank" class="dock-btn" data-tooltip="Live Support">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+     
 
     <a href="tel:18001801551" class="dock-btn sos-btn" data-tooltip="Kisan SOS (1800-180-1551)">
         <i class="fa-solid fa-phone-volume"></i>
@@ -786,4 +789,350 @@
             behavior: "smooth"
         });
     }
+</script>
+
+
+
+<!-- ==========================================================================
+     ZYNE AI CHAT WIDGET - PREMIUM GLASSMORPHISM
+     ========================================================================== -->
+<style>
+    .zyne-chat-widget {
+        position: fixed;
+        bottom: 80px; /* Sits just above the bottom */
+        right: 80px;  /* Offset to avoid overlapping the floating dock */
+        width: 350px;
+        height: 500px;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(16, 185, 129, 0.15);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        
+        /* Hidden state by default */
+        transform: translateY(30px) scale(0.95);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Active State Triggered by openZyneAssistant() */
+    .zyne-chat-widget.active {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .zyne-header {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .zyne-header h5 {
+        margin: 0;
+        color: #fff;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .zyne-header h5 i {
+        color: #10b981;
+    }
+
+    .zyne-close-btn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .zyne-close-btn:hover {
+        color: #ef4444;
+    }
+
+    .zyne-body {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .zyne-message {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px 16px;
+        border-radius: 14px;
+        border-bottom-left-radius: 4px;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        max-width: 85%;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .zyne-footer {
+        padding: 15px;
+        background: rgba(2, 6, 23, 0.5);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        gap: 10px;
+    }
+
+    .zyne-footer input {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50px;
+        padding: 10px 20px;
+        color: #fff;
+        font-size: 0.9rem;
+        outline: none;
+        transition: all 0.3s;
+    }
+
+    .zyne-footer input:focus {
+        border-color: #10b981;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .zyne-send-btn {
+        background: #10b981;
+        color: #fff;
+        border: none;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .zyne-send-btn:hover {
+        background: #059669;
+        transform: scale(1.05);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .zyne-chat-widget {
+            right: 15px;
+            bottom: 70px;
+            width: calc(100% - 30px);
+            height: 400px;
+        }
+    }
+
+
+
+    /* Align user messages to the right and style them */
+.zyne-message.user {
+    align-self: flex-end;
+    background: rgba(16, 185, 129, 0.2); /* Soft Emerald */
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 14px;
+}
+
+/* Typing Dots Animation */
+.typing-dots span {
+    display: inline-block; width: 6px; height: 6px; background: #94A3B8;
+    border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite ease-in-out both;
+}
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+
+
+
+/* Dynamic Message Styling for Dark Theme */
+.zyne-message {
+    display: flex;
+    max-width: 88%;
+    animation: fadeIn 0.3s ease;
+    background: transparent !important; /* Overriding old background */
+    border: none !important;
+    padding: 0 !important;
+}
+
+.zyne-message.bot { align-self: flex-start; }
+.zyne-message.user { align-self: flex-end; }
+
+.msg-bubble {
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.zyne-message.bot .msg-bubble {
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom-left-radius: 4px;
+}
+
+.zyne-message.user .msg-bubble {
+    background: rgba(16, 185, 129, 0.2); /* Emerald Tint */
+    color: #ffffff;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-bottom-right-radius: 4px;
+}
+
+/* Typing Dots */
+.typing-dots span {
+    display: inline-block; width: 6px; height: 6px; background: #94A3B8;
+    border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite ease-in-out both;
+}
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+</style>
+
+<div class="zyne-chat-widget" id="zyneChatWidget">
+    <div class="zyne-header">
+        <h5><i class="fa-solid fa-robot"></i> Zyne AI Assistant</h5>
+        <button class="zyne-close-btn" onclick="closeZyneAssistant()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    
+    <div class="zyne-body" id="zyneChatBody">
+    <div class="zyne-message bot">
+        <div class="msg-bubble">
+            👋 Hello! I am Zyne, your HarvestIQ AI Assistant. Ask me about weather forecasts, live mandi prices, or crop disease management!
+        </div>
+    </div>
+</div>
+    
+<div class="zyne-footer">
+    <input type="text" id="zyneInput" placeholder="Type your question..." autocomplete="off" onkeypress="handleZyneEnter(event)">
+    
+    <button class="zyne-send-btn" id="zyneSendBtn" onclick="sendZyneMessage()">
+        <i class="fa-solid fa-paper-plane"></i>
+    </button>
+</div>
+</div>
+<script>
+// ==========================================
+// 🤖 DYNAMIC ZYNE AI CHAT LOGIC (Dark Theme)
+// ==========================================
+
+// Chat History Array to remember context
+let zyneChatHistory = []; 
+
+function openZyneAssistant() {
+    const widget = document.getElementById('zyneChatWidget');
+    if(widget) {
+        widget.classList.add('active');
+        setTimeout(() => { document.getElementById('zyneInput').focus(); }, 300);
+    }
+}
+
+function closeZyneAssistant() {
+    const widget = document.getElementById('zyneChatWidget');
+    if(widget) { widget.classList.remove('active'); }
+}
+
+// Close chat when clicking outside
+document.addEventListener('click', function(event) {
+    const widget = document.getElementById('zyneChatWidget');
+    const aiDockBtn = document.querySelector('[data-tooltip="Ask Zyne AI"]');
+    
+    if (widget && widget.classList.contains('active') && 
+        !widget.contains(event.target) && 
+        !aiDockBtn.contains(event.target)) {
+        closeZyneAssistant();
+    }
+});
+
+function handleZyneEnter(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); 
+        sendZyneMessage();
+    }
+}
+
+async function sendZyneMessage() {
+    const inputField = document.getElementById('zyneInput');
+    const sendBtn = document.getElementById('zyneSendBtn');
+    const message = inputField.value.trim();
+    const chatBody = document.getElementById('zyneChatBody');
+
+    if (message === "") return;
+
+    // Disable input while processing
+    inputField.disabled = true;
+    sendBtn.disabled = true;
+
+    // Show User Message
+    chatBody.innerHTML += `<div class="zyne-message user"><div class="msg-bubble">${message}</div></div>`;
+    inputField.value = ""; 
+    chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+
+    // Show AI Typing
+    const typingId = "typing-" + Date.now();
+    chatBody.innerHTML += `
+        <div class="zyne-message bot" id="${typingId}">
+            <div class="msg-bubble typing-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    `;
+    chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+
+    try {
+        // NOTE: Ensure 'zyne_chat_api.php' is the correct path to your PHP file
+        const response = await fetch('zyne_chat_api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: message,
+                history: zyneChatHistory 
+            })
+        });
+
+        const data = await response.json();
+        document.getElementById(typingId).remove();
+
+        // Format Bold Text
+        let formattedReply = data.reply ? data.reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') : "Error: No reply from server.";
+        
+        // Show Bot Message
+        chatBody.innerHTML += `<div class="zyne-message bot"><div class="msg-bubble">${formattedReply}</div></div>`;
+        
+        // Save to history
+        zyneChatHistory.push({ role: "user", parts: [{ text: message }] });
+        zyneChatHistory.push({ role: "model", parts: [{ text: data.reply }] });
+
+    } catch (error) {
+        document.getElementById(typingId).remove();
+        chatBody.innerHTML += `<div class="zyne-message bot"><div class="msg-bubble" style="color: #EF4444;">Connection error. Try again!</div></div>`;
+    }
+
+    // Re-enable input
+    inputField.disabled = false;
+    sendBtn.disabled = false;
+    inputField.focus();
+    chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'smooth' });
+}
 </script>

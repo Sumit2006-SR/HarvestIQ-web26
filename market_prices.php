@@ -171,6 +171,38 @@ $json_encoded_data = json_encode($market_data_json);
             cards[i].style.display = (matchText && matchFilter) ? 'block' : 'none';
         }
     }
+
+
+
+    // 🟢 AUTO-FILTER ON LOAD FROM VOICE SEARCH
+    window.addEventListener('DOMContentLoaded', () => {
+        // Read the URL for a '?search=' parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        if (urlParams.has('search')) {
+            const searchQuery = urlParams.get('search');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (searchInput) {
+                // Populate the search box
+                searchInput.value = searchQuery;
+                
+                // Remove trailing punctuation that voice API sometimes adds (like periods)
+                searchInput.value = searchInput.value.replace(/[.,]/g, '');
+                
+                // Trigger your existing filter function
+                filterData();
+                
+                // Optional: Clean up the URL so it looks nice without reloading
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+    });
 </script>
+
+
+
+
+
 </body>
 </html>
